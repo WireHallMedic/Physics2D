@@ -1,0 +1,11 @@
+package Physics2D;
+
+public enum GeometryShape
+{
+   SQUARE, 
+   OPEN_SQUARE,
+   ASCENDING_FLOOR, 
+   DESCENDING_FLOOR,
+   ASCENDING_CEILING,
+   DESCENDING_CEILING;
+}
