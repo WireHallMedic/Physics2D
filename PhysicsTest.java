@@ -16,7 +16,6 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
    public static final int WATER_GRAVITY = 15;
    public static final int WATER_PHYSICS_INDEX = P2DManager.DEFAULT_PHYSICS_INDEX + 1;
    public static final int ICE_PHYSICS_INDEX = WATER_PHYSICS_INDEX + 1;
-   public static boolean[][] passMap;
    public static GeometryBlock[][] blockMap;
    private boolean leftHeld = false;
    private boolean rightHeld = false;
@@ -33,9 +32,7 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
       player.setAffectedByGravity(true);
       player.setCorporeal(true);
       
-      passMap = genMap();
       blockMap = genBlockMap();
-      passMap = null;
       
       P2DManager.initializeValues(NORMAL_GRAVITY, NORMAL_TERMINAL_VELOCITY, 1.0, 1.0);
       
@@ -109,7 +106,24 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
          if(!blockMap[x][y].isPassable())
          {
             g.setColor(Color.BLACK);
-            g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            switch(blockMap[x][y].getShape())
+            {  
+               case SQUARE :
+                  g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                  break;
+               case ASCENDING_FLOOR :
+                  g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                  break;
+               case DESCENDING_FLOOR :
+                  g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                  break;
+               case ASCENDING_CEILING :
+                  g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                  break;
+               case DESCENDING_CEILING :
+                  g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                  break;
+            }
          }
          else if(blockMap[x][y].getGravityIndex() == WATER_PHYSICS_INDEX)
          {
@@ -178,8 +192,14 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
          else
             m[x][y] = true;
       }
+      m[MAP_SIZE / 2][MAP_SIZE - 5] = false;
+      m[(MAP_SIZE / 2) + 1][MAP_SIZE - 5] = false;
+      m[(MAP_SIZE / 2) + 2][MAP_SIZE - 5] = false;
+      m[(MAP_SIZE / 2) + 3][MAP_SIZE - 5] = false;
       m[MAP_SIZE / 2][MAP_SIZE - 4] = false;
-      m[(MAP_SIZE / 2) + 1][MAP_SIZE - 4] = false;
+      m[(MAP_SIZE / 2) + 3][MAP_SIZE - 4] = false;
+      m[MAP_SIZE / 2][MAP_SIZE - 6] = false;
+      m[(MAP_SIZE / 2) + 3][MAP_SIZE - 6] = false;
       m[2][4] = false;
       m[3][MAP_SIZE - 4] = false;
       m[4][MAP_SIZE - 4] = false;
@@ -190,6 +210,7 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
    public static GeometryBlock[][] genBlockMap()
    {
       GeometryBlock[][] bMap = new GeometryBlock[MAP_SIZE][MAP_SIZE];
+      boolean[][] passMap = genMap();
       for(int x = 0; x < MAP_SIZE; x++)
       for(int y = 0; y < MAP_SIZE; y++)
       {
@@ -205,6 +226,12 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
       
       for(int y = 1; y < MAP_SIZE - 1; y++)
          bMap[MAP_SIZE - 2][y].setAllPhysicsIndices(WATER_PHYSICS_INDEX);
+      
+      bMap[MAP_SIZE / 2][MAP_SIZE - 4].setShape(GeometryShape.DESCENDING_CEILING);
+      bMap[(MAP_SIZE / 2) + 3][MAP_SIZE - 4].setShape(GeometryShape.ASCENDING_CEILING);
+      bMap[MAP_SIZE / 2][MAP_SIZE - 6].setShape(GeometryShape.DESCENDING_FLOOR);
+      bMap[(MAP_SIZE / 2) + 3][MAP_SIZE - 6].setShape(GeometryShape.ASCENDING_FLOOR);
+      
       return bMap;
    }
 }
