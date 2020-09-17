@@ -44,6 +44,16 @@ public class GeometryBlock
       speedMultIndex = sm;
    }
    
+   public GeometryBlock(GeometryBlock that)
+   {
+      this.passable = that.passable;
+      this.shape = that.shape;
+      this.gravityIndex = that.gravityIndex;
+      this.terminalVelocityIndex = that.terminalVelocityIndex;
+      this.frictionIndex = that.frictionIndex;
+      this.speedMultIndex = that.speedMultIndex;
+   }
+   
    public static GeometryBlock getSolidBlock()
    {
       return new GeometryBlock(false, DEFAULT_PHYSICS_INDEX, DEFAULT_PHYSICS_INDEX, 
