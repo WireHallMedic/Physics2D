@@ -28,6 +28,7 @@ public class P2DLine
    
    public int getXTerminus(){return p2.x;}
    public int getYTerminus(){return p2.y;}
+   public Coord getTerminus(){return new Coord(p2);}
    
    public P2DLine(int x1, int y1, int x2, int y2)
    {
@@ -66,18 +67,20 @@ public class P2DLine
       b = p1.y - (m * p1.x);
    }
    
+   
+   // x = (y - b) / m; no DIV0 protection
    public int getXAtY(int y)
    {
-      // x = (y - b) / m
       return (y - b) / m;
    }
    
+   // y = mx + b
    public int getYAtX(int x)
    {
-      // y = mx + b
       return (m * x) + b;
    }
    
+   // does this line intersect that AABB
    public boolean intersects(AABB box)
    {
       // are they far enough apart to not bother with precise checks
