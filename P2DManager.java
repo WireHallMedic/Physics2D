@@ -4,7 +4,7 @@
    Gravity values are in millitiles per tick.
    
    Lists of values are kept so that they can be prioritized; the higher the index, the
-     higher the priority
+     higher the priority. Normal is in the middle of the list.
 
 */
 
@@ -12,10 +12,10 @@ package Physics2D;
 
 public class P2DManager
 {
-   public static final int DEFAULT_PHYSICS_INDEX = 5;
+   public static int DEFAULT_PHYSICS_INDEX = 5;
    
-	private static int[] gravity = new int[10];
-	private static int[] terminalVelocity = new int[10];
+	private static int[] gravity = new int[11];
+	private static int[] terminalVelocity = new int[11];
 	private static double[] friction = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 	private static double[] speedMult = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
    private static int tileSize = 1;
@@ -53,6 +53,7 @@ public class P2DManager
       terminalVelocity = new int[s];
       friction = new double[s];
       speedMult = new double[s];
+      DEFAULT_PHYSICS_INDEX = s / 2;
    }
    
    public static void setDefaultPhysicsValues(int grav, int termVel, double frict, double speedM)
