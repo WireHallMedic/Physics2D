@@ -8,4 +8,27 @@ public enum GeometryShape
    DESCENDING_FLOOR,
    ASCENDING_CEILING,
    DESCENDING_CEILING;
+   
+   /*
+   Ascending Floor:      /
+                        /|
+                       / |
+                      /__|
+   
+   Decending Floor:   \  
+                      |\
+                      | \
+                      |__\
+   
+   Ascending Ceil:    |--/
+                      |-/
+                      |/ 
+                      /
+   
+   Decending Ceil:    \--|
+                       \-|
+                        \|
+                         \
+   
+   */
 }
