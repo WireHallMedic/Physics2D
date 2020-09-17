@@ -108,32 +108,7 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
          if(!blockMap[x][y].isPassable())
          {
             g.setColor(Color.BLACK);
-            switch(blockMap[x][y].getShape())
-            {  
-               case SQUARE :
-                  g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-                  break;
-               case ASCENDING_FLOOR :
-                  xList = new int[] {x * TILE_SIZE, (x + 1) * TILE_SIZE, (x + 1) * TILE_SIZE};
-                  yList = new int[] {(y + 1) * TILE_SIZE, (y + 1) * TILE_SIZE, y * TILE_SIZE};
-                  g.fillPolygon(xList, yList, 3);
-                  break;
-               case DESCENDING_FLOOR :
-                  xList = new int[] {x * TILE_SIZE, x * TILE_SIZE, (x + 1) * TILE_SIZE};
-                  yList = new int[]{y * TILE_SIZE, (y + 1) * TILE_SIZE, (y + 1) * TILE_SIZE};;
-                  g.fillPolygon(xList, yList, 3);
-                  break;
-               case ASCENDING_CEILING :
-                  xList = new int[] {x * TILE_SIZE, (x + 1) * TILE_SIZE, x * TILE_SIZE};
-                  yList = new int[] {(y + 1) * TILE_SIZE, y * TILE_SIZE, y * TILE_SIZE};
-                  g.fillPolygon(xList, yList, 3);
-                  break;
-               case DESCENDING_CEILING :
-                  xList = new int[] {x * TILE_SIZE, (x + 1) * TILE_SIZE, (x + 1) * TILE_SIZE};
-                  yList = new int[]{y * TILE_SIZE, (y + 1) * TILE_SIZE, y * TILE_SIZE};;
-                  g.fillPolygon(xList, yList, 3);
-                  break;
-            }
+            g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
          }
          else if(blockMap[x][y].getGravityIndex() == WATER_PHYSICS_INDEX)
          {
@@ -206,10 +181,6 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
       m[(MAP_SIZE / 2) + 1][MAP_SIZE - 5] = false;
       m[(MAP_SIZE / 2) + 2][MAP_SIZE - 5] = false;
       m[(MAP_SIZE / 2) + 3][MAP_SIZE - 5] = false;
-      m[MAP_SIZE / 2][MAP_SIZE - 4] = false;
-      m[(MAP_SIZE / 2) + 3][MAP_SIZE - 4] = false;
-      m[MAP_SIZE / 2][MAP_SIZE - 6] = false;
-      m[(MAP_SIZE / 2) + 3][MAP_SIZE - 6] = false;
       m[2][4] = false;
       m[3][MAP_SIZE - 4] = false;
       m[4][MAP_SIZE - 4] = false;
@@ -236,11 +207,6 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
       
       for(int y = 1; y < MAP_SIZE - 1; y++)
          bMap[MAP_SIZE - 2][y].setAllPhysicsIndices(WATER_PHYSICS_INDEX);
-      
-      bMap[MAP_SIZE / 2][MAP_SIZE - 4].setShape(GeometryShape.ASCENDING_CEILING);
-      bMap[(MAP_SIZE / 2) + 3][MAP_SIZE - 4].setShape(GeometryShape.DESCENDING_CEILING);
-      bMap[MAP_SIZE / 2][MAP_SIZE - 6].setShape(GeometryShape.DESCENDING_FLOOR);
-      bMap[(MAP_SIZE / 2) + 3][MAP_SIZE - 6].setShape(GeometryShape.ASCENDING_FLOOR);
       
       return bMap;
    }

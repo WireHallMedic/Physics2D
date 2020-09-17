@@ -9,7 +9,6 @@ package Physics2D;
 public class GeometryBlock
 {
 	private boolean passable;
-   private GeometryShape shape;
 	private int gravityIndex;       // which gravity is used
    private int terminalVelocityIndex;
 	private int frictionIndex;      // divide changes in speed by this
@@ -19,7 +18,6 @@ public class GeometryBlock
 
 
 	public boolean isPassable(){return passable;}
-   public GeometryShape getShape(){return shape;}
 	public int getGravityIndex(){return gravityIndex;}
    public int getTerminalVelocityIndex(){return terminalVelocityIndex;}
 	public int getFrictionIndex(){return frictionIndex;}
@@ -27,7 +25,6 @@ public class GeometryBlock
 
 
 	public void setPassable(boolean p){passable = p;}
-   public void setShape(GeometryShape s){shape = s;}
 	public void setGravityIndex(int g){gravityIndex = g;}
    public void setTerminalVelocityIndex(int tv){terminalVelocityIndex = tv;}
 	public void setFrictionIndex(int f){frictionIndex = f;}
@@ -37,7 +34,6 @@ public class GeometryBlock
    public GeometryBlock(boolean p, int gi, int tv, int fi, int sm)
    {
       passable = p;
-      shape = GeometryShape.SQUARE;
       gravityIndex = gi;
       terminalVelocityIndex = tv;
       frictionIndex = fi;
@@ -47,7 +43,6 @@ public class GeometryBlock
    public GeometryBlock(GeometryBlock that)
    {
       this.passable = that.passable;
-      this.shape = that.shape;
       this.gravityIndex = that.gravityIndex;
       this.terminalVelocityIndex = that.terminalVelocityIndex;
       this.frictionIndex = that.frictionIndex;
