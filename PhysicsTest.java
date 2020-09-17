@@ -100,6 +100,8 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
    public void paint(Graphics g)
    {
       super.paint(g);
+      int[] xList;
+      int[] yList;
       for(int x = 0; x < MAP_SIZE; x++)
       for(int y = 0; y < MAP_SIZE; y++)
       {
@@ -112,16 +114,24 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
                   g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                   break;
                case ASCENDING_FLOOR :
-                  g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                  xList = new int[] {x * TILE_SIZE, (x + 1) * TILE_SIZE, (x + 1) * TILE_SIZE};
+                  yList = new int[] {(y + 1) * TILE_SIZE, (y + 1) * TILE_SIZE, y * TILE_SIZE};
+                  g.fillPolygon(xList, yList, 3);
                   break;
                case DESCENDING_FLOOR :
-                  g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                  xList = new int[] {x * TILE_SIZE, x * TILE_SIZE, (x + 1) * TILE_SIZE};
+                  yList = new int[]{y * TILE_SIZE, (y + 1) * TILE_SIZE, (y + 1) * TILE_SIZE};;
+                  g.fillPolygon(xList, yList, 3);
                   break;
                case ASCENDING_CEILING :
-                  g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                  xList = new int[] {x * TILE_SIZE, (x + 1) * TILE_SIZE, x * TILE_SIZE};
+                  yList = new int[] {(y + 1) * TILE_SIZE, y * TILE_SIZE, y * TILE_SIZE};
+                  g.fillPolygon(xList, yList, 3);
                   break;
                case DESCENDING_CEILING :
-                  g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                  xList = new int[] {x * TILE_SIZE, (x + 1) * TILE_SIZE, (x + 1) * TILE_SIZE};
+                  yList = new int[]{y * TILE_SIZE, (y + 1) * TILE_SIZE, y * TILE_SIZE};;
+                  g.fillPolygon(xList, yList, 3);
                   break;
             }
          }
@@ -227,8 +237,8 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
       for(int y = 1; y < MAP_SIZE - 1; y++)
          bMap[MAP_SIZE - 2][y].setAllPhysicsIndices(WATER_PHYSICS_INDEX);
       
-      bMap[MAP_SIZE / 2][MAP_SIZE - 4].setShape(GeometryShape.DESCENDING_CEILING);
-      bMap[(MAP_SIZE / 2) + 3][MAP_SIZE - 4].setShape(GeometryShape.ASCENDING_CEILING);
+      bMap[MAP_SIZE / 2][MAP_SIZE - 4].setShape(GeometryShape.ASCENDING_CEILING);
+      bMap[(MAP_SIZE / 2) + 3][MAP_SIZE - 4].setShape(GeometryShape.DESCENDING_CEILING);
       bMap[MAP_SIZE / 2][MAP_SIZE - 6].setShape(GeometryShape.DESCENDING_FLOOR);
       bMap[(MAP_SIZE / 2) + 3][MAP_SIZE - 6].setShape(GeometryShape.ASCENDING_FLOOR);
       
