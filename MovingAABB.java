@@ -57,6 +57,26 @@ public class MovingAABB extends AABB
    	setCorporeal(false);
    }
 
+   // x and y are in tiles, prosX and prosY are in millitiles
+   private boolean willBlock(int x, int y, int prospectiveX, int prospectiveY, GeometryBlock[][] geoMap)
+   {
+      if(x < 0 || y < 0 || x >= geoMap.length || y >= geoMap[0].length)
+         return false;
+      if(geoMap[x][y].getShape() == GeometryShape.SQUARE)
+         return !geoMap[x][y].isPassable();
+      // if we're this far, it's an angled block, so we use the x-center of this
+      int xCenterMilipix = (prospectiveX + (width / 2)) % 1000;
+      int xCenterTile = (prospectiveX + (width / 2)) / 1000;
+      switch(geoMap[x][y].getShape())
+      {
+         case ASCENDING_FLOOR :
+            
+            break;
+      }
+      return false;
+   }
+
+   // x and y are in tiles
    private boolean blocked(int x, int y, GeometryBlock[][] geoMap)
    {
       if(x < 0 || y < 0 || x >= geoMap.length || y >= geoMap[0].length)
