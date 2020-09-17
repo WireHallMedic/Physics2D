@@ -16,8 +16,8 @@ public class P2DManager
    
 	private static int[] gravity = new int[11];
 	private static int[] terminalVelocity = new int[11];
-	private static double[] friction = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-	private static double[] speedMult = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+	private static double[] friction = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+	private static double[] speedMult = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
    private static int tileSize = 1;
 
 
