@@ -185,6 +185,8 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
       m[3][MAP_SIZE - 4] = false;
       m[4][MAP_SIZE - 4] = false;
       m[3][MAP_SIZE - 3] = false;
+      m[MAP_SIZE - 1][MAP_SIZE - 1] = true;
+      m[MAP_SIZE - 2][MAP_SIZE - 1] = true;
       return m;
    }
    
@@ -207,6 +209,8 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
       
       for(int y = 1; y < MAP_SIZE - 1; y++)
          bMap[MAP_SIZE - 2][y].setAllPhysicsIndices(WATER_PHYSICS_INDEX);
+      bMap[MAP_SIZE - 1][MAP_SIZE - 1].setAllPhysicsIndices(WATER_PHYSICS_INDEX);
+      bMap[MAP_SIZE - 2][MAP_SIZE - 1].setAllPhysicsIndices(WATER_PHYSICS_INDEX);
       
       return bMap;
    }

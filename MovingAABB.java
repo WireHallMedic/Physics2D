@@ -61,7 +61,7 @@ public class MovingAABB extends AABB
    private boolean blocked(int x, int y, GeometryBlock[][] geoMap)
    {
       if(x < 0 || y < 0 || x >= geoMap.length || y >= geoMap[0].length)
-         return false;
+         return true;
       return !geoMap[x][y].isPassable();
    }
    
