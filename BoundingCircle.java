@@ -7,7 +7,7 @@
 
 package Physics2D;
 
-public class BoundingCircle
+public class BoundingCircle extends BoundingShape
 {
 	private int originX;
 	private int originY;
@@ -49,35 +49,47 @@ public class BoundingCircle
       return P2DTools.getDistanceMetric(this.originX, this.originY, x, y) <= radiusSquared;
    }
    
+   public boolean isColliding(BoundingShape that)
+   {
+      if(that instanceof AABB)
+         return isColliding((AABB)that);
+      if(that instanceof BoundingCircle)
+         return this.isColliding((BoundingCircle)that);
+      return true;
+   }
+   
    // check if colliding with another BoundingCircle
    public boolean isColliding(BoundingCircle that)
    {
       int radiiSum = this.radius + that.radius;
       return P2DTools.getDistanceMetric(this.originX, this.originY, that.originX, that.originY) <= radiiSum * radiiSum;
    }
-   /*
-   // check if colliding with another BoundingCircle
-   public boolean isColliding(BoundingCircle that)
+   
+   // check if colliding with an AABB
+   public boolean isColliding(AABB that)
    {
-      return isColliding(that.originX, that.originY, that.halfWidth, that.halfHeight);
+      return collisionCheck(that.getOriginX(), that.getOriginY(), that.getWidth(), that.getHeight());
    }
    
    // check if colliding with a geometry location
-   public boolean isColliding(int thatOriginX, int thatOriginY, int thatHalfWidth, int thatHalfHeight)
+   public boolean isColliding(int thatOriginX, int thatOriginY, int thatWidth, int thatHeight)
    {
-      return collisionCheck(this.originX, this.originY, this.halfWidth, this.halfHeight,
-                            thatOriginX, thatOriginY, thatHalfWidth, thatHalfHeight);
+      return collisionCheck(thatOriginX, thatOriginY, thatWidth, thatHeight);
    }
    
-   // base collision routine. Removed from isColliding(BoundingCircle) to be used for grid tiles and impending collision too.
-   public boolean collisionCheckRect(int aOriginX, int aOriginY, int aHalfWidth, int aHalfHeight,
-                                 int bOriginX, int bOriginY, int bHalfWidth, int bHalfHeight)
+   // base collision routine (circle to box)
+   // if any of the circles orthoganal points are in the box, or any of the box's diagonal points are in the circle,
+   // there exists a collision
+   public boolean collisionCheck(int thatOriginX, int thatOriginY, int thatWidth, int thatHeight)
    {
-      if(Math.abs((aOriginX + aHalfWidth) - (bOriginX + bHalfWidth)) > aHalfWidth + bHalfWidth) 
-         return false;
-      if(Math.abs((aOriginY + aHalfHeight) - (bOriginY + bHalfHeight)) > aHalfHeight + bHalfHeight) 
-         return false;
-      return true;
+      return this.pointIsIn(thatOriginX, thatOriginY) ||
+             this.pointIsIn(thatOriginX + thatWidth, thatOriginY) ||
+             this.pointIsIn(thatOriginX, thatOriginY + thatHeight) ||
+             this.pointIsIn(thatOriginX + thatWidth, thatOriginY + thatHeight) ||
+             P2DTools.pointIsInBox(originX + radius, originY + radius, thatOriginX, thatOriginY, thatWidth, thatHeight) ||
+             P2DTools.pointIsInBox(originX + radius, originY - radius, thatOriginX, thatOriginY, thatWidth, thatHeight) ||
+             P2DTools.pointIsInBox(originX - radius, originY + radius, thatOriginX, thatOriginY, thatWidth, thatHeight) ||
+             P2DTools.pointIsInBox(originX - radius, originY - radius, thatOriginX, thatOriginY, thatWidth, thatHeight);
    }
-   */
+   
 }

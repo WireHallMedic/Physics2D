@@ -6,7 +6,9 @@
 
 package Physics2D;
 
-public interface BoundingShape
+public abstract class BoundingShape
 {
-
+   public abstract boolean pointIsIn(int x, int y);
+   
+   public abstract boolean isColliding(BoundingShape that);
 }
