@@ -7,7 +7,7 @@
 
 package Physics2D;
 
-public class AABB extends BoundingShape
+public class AABB implements BoundingShape
 {
 	protected int originX;
 	protected int originY;

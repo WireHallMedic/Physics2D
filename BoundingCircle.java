@@ -7,7 +7,7 @@
 
 package Physics2D;
 
-public class BoundingCircle extends BoundingShape
+public class BoundingCircle implements BoundingShape
 {
 	private int originX;
 	private int originY;
