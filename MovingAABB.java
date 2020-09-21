@@ -7,7 +7,7 @@
 
 package Physics2D;
 
-public class MovingAABB extends AABB
+public class MovingAABB extends AABB implements MovingBS
 {
 	private int xSpeed;
 	private int ySpeed;
@@ -63,6 +63,12 @@ public class MovingAABB extends AABB
       if(x < 0 || y < 0 || x >= geoMap.length || y >= geoMap[0].length)
          return true;
       return !geoMap[x][y].isPassable();
+   }
+   
+   public void applyImpulse(int x, int y)
+   {
+      xSpeed += x;
+      ySpeed += y;
    }
    
    // move x, resolve x collisions, move y, resolve y collisions

@@ -8,11 +8,11 @@ package Physics2D;
 
 public interface MovingBS
 {
-	public void setXSpeed(int x)
-	public void setYSpeed(int y)
-   public void setSpeed(int x, int y)
-	public void setAffectedByGravity(boolean a)
-	public void setCorporeal(boolean c)
+	public void setXSpeed(int x);
+	public void setYSpeed(int y);
+   public void setSpeed(int x, int y);
+	public void setAffectedByGravity(boolean a);
+	public void setCorporeal(boolean c);
    
 	public int getXSpeed();
 	public int getYSpeed();
@@ -20,4 +20,5 @@ public interface MovingBS
 	public boolean isCorporeal();
    
    public void applyImpulse(int x, int y);
+   public void doPhysics(GeometryBlock[][] geoMap);
 }
