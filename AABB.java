@@ -75,15 +75,5 @@ public class AABB implements BoundingShape
       return P2DTools.boxesIntersect(this.originX, this.originY, this.halfWidth, this.halfHeight,
                                      thatOriginX, thatOriginY, thatHalfWidth, thatHalfHeight);
    }
-   /*
-   // base collision routine. Removed from isColliding(AABB) to be used for grid tiles and impending collision too.
-   public boolean collisionCheck(int aOriginX, int aOriginY, int aHalfWidth, int aHalfHeight,
-                                 int bOriginX, int bOriginY, int bHalfWidth, int bHalfHeight)
-   {
-      if(Math.abs((aOriginX + aHalfWidth) - (bOriginX + bHalfWidth)) > aHalfWidth + bHalfWidth) 
-         return false;
-      if(Math.abs((aOriginY + aHalfHeight) - (bOriginY + bHalfHeight)) > aHalfHeight + bHalfHeight) 
-         return false;
-      return true;
-   }*/
+
 }
