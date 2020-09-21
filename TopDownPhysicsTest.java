@@ -20,6 +20,7 @@ public class TopDownPhysicsTest extends JPanel implements KeyListener, ActionLis
    private boolean rightHeld = false;
    private boolean upHeld = false;
    private boolean downHeld = false;
+   private BoundingCircle circle;
    
    private MovingAABB player;
    
@@ -40,6 +41,9 @@ public class TopDownPhysicsTest extends JPanel implements KeyListener, ActionLis
       P2DManager.setTileSize(TILE_SIZE);
       
 	   P2DManager.setSpeedMult(WATER_PHYSICS_INDEX, .5);
+      
+      // remember circles are drawn from the center
+      circle = new BoundingCircle(1000,5500, 5500);
       
       javax.swing.Timer timer = new javax.swing.Timer(1000/30, null);
       timer.addActionListener(this);
@@ -138,6 +142,16 @@ public class TopDownPhysicsTest extends JPanel implements KeyListener, ActionLis
             g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
          }
       }
+      
+      g.setColor(Color.ORANGE);
+      if(player.isColliding(circle))
+         g.setColor(Color.RED);
+      int r = circle.getRadius();
+      g.fillOval(P2DManager.millitileToPixel(circle.getOriginX() - r), 
+                 P2DManager.millitileToPixel(circle.getOriginY() - r), 
+                 P2DManager.millitileToPixel(r + r), 
+                 P2DManager.millitileToPixel(r + r));
+      
       g.setColor(Color.YELLOW);
       g.fillRect(P2DManager.millitileToPixel(player.getOriginX()), P2DManager.millitileToPixel(player.getOriginY()), 
                        TILE_SIZE, TILE_SIZE);

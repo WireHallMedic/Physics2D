@@ -86,10 +86,10 @@ public class BoundingCircle extends BoundingShape
              this.pointIsIn(thatOriginX + thatWidth, thatOriginY) ||
              this.pointIsIn(thatOriginX, thatOriginY + thatHeight) ||
              this.pointIsIn(thatOriginX + thatWidth, thatOriginY + thatHeight) ||
-             P2DTools.pointIsInBox(originX + radius, originY + radius, thatOriginX, thatOriginY, thatWidth, thatHeight) ||
-             P2DTools.pointIsInBox(originX + radius, originY - radius, thatOriginX, thatOriginY, thatWidth, thatHeight) ||
-             P2DTools.pointIsInBox(originX - radius, originY + radius, thatOriginX, thatOriginY, thatWidth, thatHeight) ||
-             P2DTools.pointIsInBox(originX - radius, originY - radius, thatOriginX, thatOriginY, thatWidth, thatHeight);
+             P2DTools.pointIsInBox(originX + radius, originY, thatOriginX, thatOriginY, thatWidth, thatHeight) ||
+             P2DTools.pointIsInBox(originX - radius, originY, thatOriginX, thatOriginY, thatWidth, thatHeight) ||
+             P2DTools.pointIsInBox(originX, originY + radius, thatOriginX, thatOriginY, thatWidth, thatHeight) ||
+             P2DTools.pointIsInBox(originX, originY - radius, thatOriginX, thatOriginY, thatWidth, thatHeight);
    }
    
 }
