@@ -20,15 +20,15 @@ public class PhysicsTestCircle extends JPanel implements KeyListener, ActionList
    private boolean leftHeld = false;
    private boolean rightHeld = false;
    
-   private MovingAABB player;
+   private MovingBC player;
    
-   public PhysicsTest()
+   public PhysicsTestCircle()
    {
       super();
       setSize(800, 800);
       setVisible(true);
       
-      player = new MovingAABB(1000, 1000, 2000, 2000);
+      player = new MovingBC(1000, 2000, 2000);
       player.setAffectedByGravity(true);
       player.setCorporeal(true);
       
@@ -72,7 +72,7 @@ public class PhysicsTestCircle extends JPanel implements KeyListener, ActionList
    public void actionPerformed(ActionEvent ae)
    {
       int xSpd = player.getXSpeed();
-      double friction = player.getSideOnFriction(blockMap);
+      double friction = 1.0;//player.getSideOnFriction(blockMap);
       double accelMult = (.5 + friction) / 2.0;
       // horizontal movement
       
@@ -117,9 +117,10 @@ public class PhysicsTestCircle extends JPanel implements KeyListener, ActionList
          }
       }
       g.setColor(Color.YELLOW);
-      g.fillRect(P2DManager.millitileToPixel(player.getOriginX()), P2DManager.millitileToPixel(player.getOriginY()), 
+      g.fillOval(P2DManager.millitileToPixel(player.getOriginX() - 500), 
+                       P2DManager.millitileToPixel(player.getOriginY() - 500), 
                        TILE_SIZE, TILE_SIZE);
-      
+      /*
       int sensorInset = P2DManager.millitileToPixel(player.impactSensorOffset);
       int sensorLength = TILE_SIZE - sensorInset - sensorInset;
       int playerXLoc = P2DManager.millitileToPixel(player.getOriginX());
@@ -152,7 +153,7 @@ public class PhysicsTestCircle extends JPanel implements KeyListener, ActionList
       else
          g.setColor(Color.GREEN.darker());
       g.fillRect(playerXLoc, playerYLoc + sensorInset, 
-                 4, sensorLength);
+                 4, sensorLength);*/
    }
    
    public static void main(String[] args)
@@ -160,7 +161,7 @@ public class PhysicsTestCircle extends JPanel implements KeyListener, ActionList
       JFrame frame = new JFrame();
       frame.setSize(800, 800);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      PhysicsTest pt = new PhysicsTest();
+      PhysicsTestCircle pt = new PhysicsTestCircle();
       frame.addKeyListener(pt);
       frame.add(pt);
       frame.setVisible(true);
