@@ -202,8 +202,8 @@ public class MovingBC extends BoundingCircle implements MovingBS
    // returns the highest indexed friction of tiles occupied by the AABB
    public double getTopDownFriction(GeometryBlock[][] geoMap)
    {
-      int tileX1 = originX / 1000;
-      int tileY1 = originY / 1000;
+      int tileX1 = (originX - radius) / 1000;
+      int tileY1 = (originY - radius) / 1000;
       int tileX2 = (originX + radius - 1) / 1000;
       int tileY2 = (originY + radius - 1) / 1000;
       int frict = 0;
@@ -215,8 +215,8 @@ public class MovingBC extends BoundingCircle implements MovingBS
    // returns the highest indexed speedMult of tiles occupied by the AABB
    public double getTopDownSpeedMult(GeometryBlock[][] geoMap)
    {
-      int tileX1 = originX / 1000;
-      int tileY1 = originY / 1000;
+      int tileX1 = (originX - radius) / 1000;
+      int tileY1 = (originY - radius) / 1000;
       int tileX2 = (originX + radius - 1) / 1000;
       int tileY2 = (originY + radius - 1) / 1000;
       
