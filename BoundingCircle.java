@@ -11,10 +11,10 @@ package Physics2D;
 
 public class BoundingCircle implements BoundingShape
 {
-	private int originX;
-	private int originY;
-	private int radius;
-   private int radiusSquared;    // memoization
+	protected int originX;
+	protected int originY;
+	protected int radius;
+   protected int radiusSquared;    // memoization
 
 
 	public int getOriginX(){return originX;}

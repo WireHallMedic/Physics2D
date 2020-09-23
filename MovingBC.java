@@ -1,7 +1,8 @@
 /*
 
-   Moving axis-aligned bounding box. Updates speeds at the end of each tick (after movement).
+   Moving bounding circle. Updates speeds at the end of each tick (after movement).
    All values are in millitiles
+   Only indended for top-down (not side-on), because gravity gets ugly for circles on edges)
 
 */
 
@@ -15,22 +16,12 @@ public class MovingBC extends BoundingCircle implements MovingBS
 	private boolean corporeal;
 	private int stepOriginX;      // used to avoid moving into walls
 	private int stepOriginY;
-   public static final int impactSensorOffset = 100;
-   private boolean bottomSensor = false;
-   private boolean topSensor = false;
-   private boolean rightSensor = false;
-   private boolean leftSensor = false;
-   private static final boolean oldStylePushing = false;
 
 
 	public int getXSpeed(){return xSpeed;}
 	public int getYSpeed(){return ySpeed;}
 	public boolean isAffectedByGravity(){return affectedByGravity;}
 	public boolean isCorporeal(){return corporeal;}
-   public boolean bottomSensor(){return bottomSensor;}
-   public boolean topSensor(){return topSensor;}
-   public boolean leftSensor(){return leftSensor;}
-   public boolean rightSensor(){return rightSensor;}
 
 
 	public void setXSpeed(int x){xSpeed = x;}
@@ -42,18 +33,17 @@ public class MovingBC extends BoundingCircle implements MovingBS
    
    public MovingBC()
    {
-      this(1000, 1000, 0, 0);
+      this(1000, 0, 0);
    }
 
-   public MovingBC(int w, int h)
+   public MovingBC(int r)
    {
-      this(w, h, 0, 0);
+      this(r, 0, 0);
    }
 
-   public MovingBC(int w, int h, int x, int y)
+   public MovingBC(int r, int x, int y)
    {
-      super(w, h, x, y);
-   	setAffectedByGravity(false);
+      super(r, x, y);
    	setCorporeal(false);
    }
 
@@ -74,11 +64,6 @@ public class MovingBC extends BoundingCircle implements MovingBS
    // move x, resolve x collisions, move y, resolve y collisions
    public void doPhysics(GeometryBlock[][] geoMap)
    {
-      int localGravity = getGravity(geoMap);
-      // set prospective position
-      if(affectedByGravity)
-         ySpeed = Math.min(ySpeed + P2DManager.getGravity(localGravity), 
-                           P2DManager.getTerminalVelocity(localGravity));
       stepOriginX = originX + xSpeed;
       stepOriginY = originY + ySpeed;
       
@@ -90,11 +75,14 @@ public class MovingBC extends BoundingCircle implements MovingBS
       // a problem
       if(corporeal)
       {
+         boolean yBump = false;
+         boolean xBump = false;
          // check and resolve horizontal movement
          int snapLocX = getHorizSnapLoc(stepOriginX, originY, geoMap);
          if(snapLocX != -1)
          {
             stepOriginX = snapLocX;
+            xBump = true;
          }
 
          // check and resolve vertical movement
@@ -102,19 +90,13 @@ public class MovingBC extends BoundingCircle implements MovingBS
          if(snapLocY != -1)
          {
             stepOriginY = snapLocY;
+            yBump = true;
          }
          
-         // check if you're bumping into any walls
-         updateSensors(stepOriginX, stepOriginY, geoMap);
-         
          // stop movement if bumping into wall on that vector
-         if(xSpeed > 0 && rightSensor)
+         if(xBump)
             xSpeed = 0;
-         else if(xSpeed < 0 && leftSensor)
-            xSpeed = 0;
-         if(ySpeed > 0 && bottomSensor)
-            ySpeed = 0;
-         else if(ySpeed < 0 && topSensor)
+         if(yBump)
             ySpeed = 0;
       }
       
@@ -135,29 +117,29 @@ public class MovingBC extends BoundingCircle implements MovingBS
       if(ySpeed > 0)
       {
          // bottom left
-         tileX = (xPos + impactSensorOffset) / 1000;
-         tileY = (yPos + height) / 1000;
+         tileX = xPos / 1000;
+         tileY = (yPos + radius) / 1000;
          if(blocked(tileX, tileY, geoMap))
             collision++;
          // bottom right
-         tileX = (xPos + width - impactSensorOffset) / 1000;
+         tileX = (xPos + radius) / 1000;
          if((blocked(tileX, tileY, geoMap)))
             collision++;
          if(collision > 0)
          {
-            snapLoc = (tileY * 1000) - height;
+            snapLoc = (tileY * 1000) - radius;
          }
       }
       // check up
       else if(ySpeed < 0)
       {
          // upper left
-         tileX = (xPos + impactSensorOffset) / 1000;
+         tileX = xPos / 1000;
          tileY = yPos / 1000;
          if(blocked(tileX, tileY, geoMap))
             collision++;
          // upper right
-         tileX = (xPos + width - impactSensorOffset) / 1000;
+         tileX = (xPos + radius) / 1000;
          if((blocked(tileX, tileY, geoMap)))
             collision++;
          if(collision > 0)
@@ -180,12 +162,12 @@ public class MovingBC extends BoundingCircle implements MovingBS
       if(xSpeed > 0)
       {
          // upper right
-         tileX = (xPos + width) / 1000;
-         tileY = (yPos + impactSensorOffset) / 1000;
+         tileX = (xPos + radius) / 1000;
+         tileY = yPos / 1000;
          if(blocked(tileX, tileY, geoMap))
             collision++;
          // bottom right
-         tileY = (yPos + height - impactSensorOffset) / 1000;
+         tileY = (yPos + radius) / 1000;
          if((blocked(tileX, tileY, geoMap)))
             collision++;
          if(collision > 0)
@@ -198,11 +180,11 @@ public class MovingBC extends BoundingCircle implements MovingBS
       {
          // upper left
          tileX = xPos / 1000;
-         tileY = (yPos + impactSensorOffset) / 1000;
+         tileY = yPos / 1000;
          if(blocked(tileX, tileY, geoMap))
             collision++;
          // bottom left
-         tileY = (yPos + height - impactSensorOffset) / 1000;
+         tileY = (yPos + radius) / 1000;
          if((blocked(tileX, tileY, geoMap)))
             collision++;
          if(collision > 0)
@@ -212,62 +194,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
       }
       return snapLoc;
    }
-   
-   private void updateSensors(int x, int y, GeometryBlock[][] geoMap)
-   {
-      // horizontal checks
-      int tileX1 = (x + width + 1) / 1000;                    // right
-      int tileX2 = (x - 1) / 1000;                            // left
-      int tileY1 = (y + impactSensorOffset) / 1000;           // top
-      int tileY2 = (y + height - impactSensorOffset) / 1000;  // bottom
-      
-      rightSensor = blocked(tileX1, tileY1, geoMap) || blocked(tileX1, tileY2, geoMap);
-      leftSensor = blocked(tileX2, tileY1, geoMap) || blocked(tileX2, tileY2, geoMap);
-      
-      // vertical checks
-      tileY1 = (y + height + 1) / 1000;                       // bottom
-      tileY2 = (y - 1) / 1000;                                // top
-      tileX1 = (x + impactSensorOffset) / 1000;               // left
-      tileX2 = (x + width - impactSensorOffset) / 1000;       // right
-      
-      bottomSensor = blocked(tileX1, tileY1, geoMap) || blocked(tileX2, tileY1, geoMap);
-      topSensor = blocked(tileX1, tileY2, geoMap) || blocked(tileX2, tileY2, geoMap);
-   }
-   
-   
-   // side-on methods
-   ///////////////////////////////////////////////////////////////////////////////////////
-   
-   // if the actor is standing on a block, returns the highest indexed friction, else
-   // returns 1.0
-   public double getSideOnFriction(GeometryBlock[][] geoMap)
-   {
-      if(bottomSensor)
-      {
-         int index = -1;
-         int tileY = (originY + height) / 1000;                        // bottom
-         int tileX1 = (originX + impactSensorOffset) / 1000;               // left
-         int tileX2 = (originX + width - impactSensorOffset) / 1000;       // right
-         for(int x = tileX1; x <= tileX2; x++)
-            index = Math.max(index, geoMap[x][tileY].getFrictionIndex());
-         return P2DManager.getFriction(index);
-      }
-      return 1.0;
-   }
-   
-   // returns the highest-indexed gravity used by one of the blocks which contains part of this AABB
-   public int getGravity(GeometryBlock[][] geoMap)
-   {
-      int tileX1 = originX / 1000;
-      int tileY1 = originY / 1000;
-      int tileX2 = (originX + width - 1) / 1000;
-      int tileY2 = (originY + height - 1) / 1000;
-      int grav = 0;
-      for(int x = tileX1; x <= tileX2; x++)
-      for(int y = tileY1; y <= tileY2; y++)
-         grav = Math.max(grav, geoMap[x][y].getGravityIndex());
-      return grav;
-   }
+
    
    // top-down methods
    ///////////////////////////////////////////////////////////////////////////////////////
@@ -277,8 +204,8 @@ public class MovingBC extends BoundingCircle implements MovingBS
    {
       int tileX1 = originX / 1000;
       int tileY1 = originY / 1000;
-      int tileX2 = (originX + width - 1) / 1000;
-      int tileY2 = (originY + height - 1) / 1000;
+      int tileX2 = (originX + radius - 1) / 1000;
+      int tileY2 = (originY + radius - 1) / 1000;
       int frict = 0;
       for(int x = tileX1; x <= tileX2; x++)
       for(int y = tileY1; y <= tileY2; y++)
@@ -290,8 +217,8 @@ public class MovingBC extends BoundingCircle implements MovingBS
    {
       int tileX1 = originX / 1000;
       int tileY1 = originY / 1000;
-      int tileX2 = (originX + width - 1) / 1000;
-      int tileY2 = (originY + height - 1) / 1000;
+      int tileX2 = (originX + radius - 1) / 1000;
+      int tileY2 = (originY + radius - 1) / 1000;
       
       int smi = 0;
       for(int x = tileX1; x <= tileX2; x++)
