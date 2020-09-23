@@ -2,6 +2,8 @@
 
    Circle for collision, etc. Dimensions are internally kept as millitiles.
    Origin is center.
+   
+   At this time, there is no movingBC nor is there an intent to make one; KISS.
 
 */
 
