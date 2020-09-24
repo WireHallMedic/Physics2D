@@ -185,18 +185,18 @@ public class MovingBC extends BoundingCircle implements MovingBS
          if(blocked(tileX, tileY, geoMap))
          {
             snapLoc = (tileX * 1000) - radius;
-         }
+         }       
          else // check for corners in circle
          {
             tileMax = (yPos + radius) / 1000;
             for(tileY = (yPos - radius) / 1000; tileY <= tileMax; tileY++)
             {
-               if(blocked(tileX, tileY, geoMap))
+               if(blocked(tileX, tileY, geoMap) || blocked(tileX, tileY - 1, geoMap))
                {
-                  if(pointIsIn(tileX * 1000, tileY * 1000) ||
-                     pointIsIn(tileX * 1000, (tileY + 1) * 1000))
+                  if(pointIsIn(tileX * 1000, tileY * 1000))
                   {
-                     snapLoc = (tileX * 1000) - radius;
+                     int offset = P2DTools.getPythag(Math.abs(yPos - (tileY * 1000)), radius);
+                     snapLoc = (tileX * 1000) - offset;
                      break;
                   }
                }
@@ -218,6 +218,23 @@ public class MovingBC extends BoundingCircle implements MovingBS
             tileMax = (yPos + radius) / 1000;
             for(tileY = (yPos - radius) / 1000; tileY <= tileMax; tileY++)
             {
+               if(blocked(tileX, tileY, geoMap) || blocked(tileX, tileY - 1, geoMap))
+               {
+                  if(pointIsIn((tileX + 1) * 1000, tileY * 1000))
+                  {
+                     int offset = P2DTools.getPythag(Math.abs(yPos - (tileY * 1000)), radius);
+                     snapLoc = ((tileX + 1) * 1000) + offset;
+                     break;
+                  }
+               }
+            }
+         }
+         /*
+         else // check for corners in circle
+         {
+            tileMax = (yPos + radius) / 1000;
+            for(tileY = (yPos - radius) / 1000; tileY <= tileMax; tileY++)
+            {
                if(blocked(tileX, tileY, geoMap))
                {
                   if(pointIsIn((tileX + 1) * 1000, tileY * 1000) ||
@@ -228,7 +245,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
                   }
                }
             }
-         }
+         }*/
       }
       return snapLoc;
    }

@@ -182,6 +182,8 @@ public class TopDownPhysicsTest2 extends JPanel implements KeyListener, ActionLi
       m[MAP_SIZE - 4][1] = false;
       m[MAP_SIZE / 2][MAP_SIZE - 4] = false;
       m[(MAP_SIZE / 2) + 1][MAP_SIZE - 4] = false;
+      m[MAP_SIZE / 2][MAP_SIZE - 5] = false;
+      m[(MAP_SIZE / 2) + 1][MAP_SIZE - 5] = false;
       m[2][4] = false;
       return m;
    }
