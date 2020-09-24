@@ -126,7 +126,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
          {
             start = (xPos - radius + sensorInset) / 1000;
             end = (xPos + radius - sensorInset) / 1000;
-            int cornersToCheck = end - start;
+            int cornersToCheck = end - start + 1;
             for(int i = 0; i < cornersToCheck; i++)
             {
                tileX = ((xPos - radius) / 1000) + i;
@@ -156,7 +156,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
          {
             start = (xPos - radius + sensorInset) / 1000;
             end = (xPos + radius - sensorInset) / 1000;
-            int cornersToCheck = end - start;
+            int cornersToCheck = end - start + 1;
             for(int i = 0; i < cornersToCheck; i++)
             {
                tileX = ((xPos - radius) / 1000) + i;
@@ -180,7 +180,8 @@ public class MovingBC extends BoundingCircle implements MovingBS
    {
       int tileX;
       int tileY;
-      int tileMax;
+      int start;
+      int end;
       int snapLoc = -1;
       
       // check right
@@ -192,15 +193,18 @@ public class MovingBC extends BoundingCircle implements MovingBS
          if(blocked(tileX, tileY, geoMap))
          {
             snapLoc = (tileX * 1000) - radius;
-         }       
+         }  
          else // check for corners in circle
          {
-            tileMax = (yPos + radius) / 1000;
-            for(tileY = (yPos - radius) / 1000; tileY <= tileMax; tileY++)
+            start = (yPos - radius + sensorInset) / 1000;
+            end = (yPos + radius - sensorInset) / 1000;
+            int cornersToCheck = end - start + 1;
+            for(int i = 0; i < cornersToCheck; i++)
             {
+               tileY = ((yPos - radius) / 1000) + i;
                if(blocked(tileX, tileY, geoMap) || blocked(tileX, tileY - 1, geoMap))
                {
-                  if(pointIsIn(tileX * 1000, tileY * 1000))
+                  if(pointIsIn(tileX * 1000, tileY * 1000)) // check upper left corner of tile
                   {
                      int offset = P2DTools.getPythag(Math.abs(yPos - (tileY * 1000)), radius);
                      snapLoc = (tileX * 1000) - offset;
@@ -222,12 +226,15 @@ public class MovingBC extends BoundingCircle implements MovingBS
          }
          else // check for corners in circle
          {
-            tileMax = (yPos + radius) / 1000;
-            for(tileY = (yPos - radius) / 1000; tileY <= tileMax; tileY++)
+            start = (yPos - radius + sensorInset) / 1000;
+            end = (yPos + radius - sensorInset) / 1000;
+            int cornersToCheck = end - start + 1;
+            for(int i = 0; i < cornersToCheck; i++)
             {
+               tileY = ((yPos - radius) / 1000) + i;
                if(blocked(tileX, tileY, geoMap) || blocked(tileX, tileY - 1, geoMap))
                {
-                  if(pointIsIn((tileX + 1) * 1000, tileY * 1000))
+                  if(pointIsIn((tileX + 1) * 1000, tileY * 1000)) // check upper right corner of tile
                   {
                      int offset = P2DTools.getPythag(Math.abs(yPos - (tileY * 1000)), radius);
                      snapLoc = ((tileX + 1) * 1000) + offset;
@@ -236,23 +243,6 @@ public class MovingBC extends BoundingCircle implements MovingBS
                }
             }
          }
-         /*
-         else // check for corners in circle
-         {
-            tileMax = (yPos + radius) / 1000;
-            for(tileY = (yPos - radius) / 1000; tileY <= tileMax; tileY++)
-            {
-               if(blocked(tileX, tileY, geoMap))
-               {
-                  if(pointIsIn((tileX + 1) * 1000, tileY * 1000) ||
-                     pointIsIn((tileX + 1) * 1000, (tileY + 1) * 1000))
-                  {
-                     snapLoc = ((tileX + 1) * 1000) + radius;
-                     break;
-                  }
-               }
-            }
-         }*/
       }
       return snapLoc;
    }
