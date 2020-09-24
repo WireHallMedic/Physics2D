@@ -117,12 +117,6 @@ public class MovingBC extends BoundingCircle implements MovingBS
          tileX = xPos / 1000;
          tileY = (yPos + radius) / 1000;
          if(blocked(tileX, tileY, geoMap))
-            collision++;/*
-         // bottom right
-         tileX = (xPos + radius) / 1000;
-         if((blocked(tileX, tileY, geoMap)))
-            collision++;*/
-         if(collision > 0)
          {
             snapLoc = (tileY * 1000) - radius;
          }
@@ -134,14 +128,8 @@ public class MovingBC extends BoundingCircle implements MovingBS
          tileX = xPos / 1000;
          tileY = (yPos - radius) / 1000;
          if(blocked(tileX, tileY, geoMap))
-            collision++;
-         // upper right
-      /*   tileX = (xPos + radius) / 1000;
-         if((blocked(tileX, tileY, geoMap)))
-            collision++;*/
-         if(collision > 0)
          {
-            snapLoc = (tileY + 1) * 1000;
+            snapLoc = ((tileY + 1) * 1000) + radius;
          }
       }
       return snapLoc;

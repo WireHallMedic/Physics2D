@@ -152,7 +152,7 @@ public class TopDownPhysicsTest2 extends JPanel implements KeyListener, ActionLi
                  P2DManager.millitileToPixel(r + r), 
                  P2DManager.millitileToPixel(r + r));
       
-      g.setColor(Color.YELLOW);
+      g.setColor(Color.CYAN);
       g.fillOval(P2DManager.millitileToPixel(player.getOriginX() - 500), P2DManager.millitileToPixel(player.getOriginY() - 500), 
                        TILE_SIZE, TILE_SIZE);
    }
