@@ -15,12 +15,11 @@ public class MovingAABB extends AABB implements MovingBS
 	private boolean corporeal;
 	private int stepOriginX;      // used to avoid moving into walls
 	private int stepOriginY;
-   public static final int impactSensorOffset = 100;
+   public static final int sensorInset = 10;
    private boolean bottomSensor = false;
    private boolean topSensor = false;
    private boolean rightSensor = false;
    private boolean leftSensor = false;
-   private static final boolean oldStylePushing = false;
 
 
 	public int getXSpeed(){return xSpeed;}
@@ -135,8 +134,8 @@ public class MovingAABB extends AABB implements MovingBS
       // check down
       if(ySpeed > 0)
       {
-         tileXStart = (xPos + impactSensorOffset) / 1000;         // bottom left
-         tileXEnd = (xPos + width - impactSensorOffset) / 1000;   // bottom right
+         tileXStart = (xPos + sensorInset) / 1000;         // bottom left
+         tileXEnd = (xPos + width - sensorInset) / 1000;   // bottom right
          tileY = (yPos + height) / 1000;
          for(int x = tileXStart; x <= tileXEnd; x++)
             if(blocked(x, tileY, geoMap))
@@ -152,8 +151,8 @@ public class MovingAABB extends AABB implements MovingBS
       // check up
       else if(ySpeed < 0)
       {
-         tileXStart = (xPos + impactSensorOffset) / 1000;         // upper left
-         tileXEnd = (xPos + width - impactSensorOffset) / 1000;   // upper right
+         tileXStart = (xPos + sensorInset) / 1000;         // upper left
+         tileXEnd = (xPos + width - sensorInset) / 1000;   // upper right
          tileY = yPos / 1000;
          for(int x = tileXStart; x <= tileXEnd; x++)
             if(blocked(x, tileY, geoMap))
@@ -182,8 +181,8 @@ public class MovingAABB extends AABB implements MovingBS
       if(xSpeed > 0)
       {
          tileX = (xPos + width) / 1000;
-         tileYStart = (yPos + impactSensorOffset) / 1000;         // top
-         tileYEnd = (yPos + height - impactSensorOffset) / 1000;  // bottom
+         tileYStart = (yPos + sensorInset) / 1000;         // top
+         tileYEnd = (yPos + height - sensorInset) / 1000;  // bottom
          for(int y = tileYStart; y <= tileYEnd; y++)
             if(blocked(tileX, y, geoMap))
             {
@@ -199,8 +198,8 @@ public class MovingAABB extends AABB implements MovingBS
       else if(xSpeed < 0)
       {
          tileX = xPos / 1000;
-         tileYStart = (yPos + impactSensorOffset) / 1000;         // top
-         tileYEnd = (yPos + height - impactSensorOffset) / 1000;  // bottom
+         tileYStart = (yPos + sensorInset) / 1000;         // top
+         tileYEnd = (yPos + height - sensorInset) / 1000;  // bottom
          for(int y = tileYStart; y <= tileYEnd; y++)
             if(blocked(tileX, y, geoMap))
             {
@@ -220,8 +219,8 @@ public class MovingAABB extends AABB implements MovingBS
       // horizontal checks
       int tileX1 = (x + width + 1) / 1000;                    // right
       int tileX2 = (x - 1) / 1000;                            // left
-      int tileY1 = (y + impactSensorOffset) / 1000;           // top
-      int tileY2 = (y + height - impactSensorOffset) / 1000;  // bottom
+      int tileY1 = (y + sensorInset) / 1000;           // top
+      int tileY2 = (y + height - sensorInset) / 1000;  // bottom
       
       rightSensor = blocked(tileX1, tileY1, geoMap) || blocked(tileX1, tileY2, geoMap);
       leftSensor = blocked(tileX2, tileY1, geoMap) || blocked(tileX2, tileY2, geoMap);
@@ -229,8 +228,8 @@ public class MovingAABB extends AABB implements MovingBS
       // vertical checks
       tileY1 = (y + height + 1) / 1000;                       // bottom
       tileY2 = (y - 1) / 1000;                                // top
-      tileX1 = (x + impactSensorOffset) / 1000;               // left
-      tileX2 = (x + width - impactSensorOffset) / 1000;       // right
+      tileX1 = (x + sensorInset) / 1000;               // left
+      tileX2 = (x + width - sensorInset) / 1000;       // right
       
       bottomSensor = blocked(tileX1, tileY1, geoMap) || blocked(tileX2, tileY1, geoMap);
       topSensor = blocked(tileX1, tileY2, geoMap) || blocked(tileX2, tileY2, geoMap);
@@ -248,8 +247,8 @@ public class MovingAABB extends AABB implements MovingBS
       {
          int index = -1;
          int tileY = (originY + height) / 1000;                        // bottom
-         int tileX1 = (originX + impactSensorOffset) / 1000;               // left
-         int tileX2 = (originX + width - impactSensorOffset) / 1000;       // right
+         int tileX1 = (originX + sensorInset) / 1000;               // left
+         int tileX2 = (originX + width - sensorInset) / 1000;       // right
          for(int x = tileX1; x <= tileX2; x++)
             index = Math.max(index, geoMap[x][tileY].getFrictionIndex());
          return P2DManager.getFriction(index);

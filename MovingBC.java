@@ -16,6 +16,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
 	private boolean corporeal;
 	private int stepOriginX;      // used to avoid moving into walls
 	private int stepOriginY;
+   public static final int sensorInset = 10;
 
 
 	public int getXSpeed(){return xSpeed;}
@@ -129,8 +130,8 @@ public class MovingBC extends BoundingCircle implements MovingBS
                {
                   if(pointIsIn(tileX * 1000, tileY * 1000))
                   {
-                     int offset = Math.abs(xPos - (tileX * 1000));
-                     snapLoc = (tileY * 1000) - radius + offset;
+                     int offset = P2DTools.getPythag(Math.abs(xPos - (tileX * 1000)), radius);
+                     snapLoc = (tileY * 1000) - offset;
                      break;
                   }
                }
@@ -149,15 +150,15 @@ public class MovingBC extends BoundingCircle implements MovingBS
          }
          else // check for corners in circle
          {
-            tileMax = (xPos + radius) / 1000;
+            tileMax = ((xPos + radius) / 1000) + 1;
             for(tileX = (xPos - radius) / 1000; tileX <= tileMax; tileX++)
             {
-               if(blocked(tileX, tileY, geoMap))
+               if(blocked(tileX, tileY, geoMap) || blocked(tileX - 1, tileY, geoMap))
                {
-                  if(pointIsIn(tileX * 1000, tileY * 1000) ||
-                     pointIsIn((tileX + 1) * 1000, tileY * 1000))
+                  if(pointIsIn(tileX * 1000, (tileY + 1) * 1000))
                   {
-                     snapLoc = ((tileY + 1) * 1000) + radius;
+                     int offset = P2DTools.getPythag(Math.abs(xPos - (tileX * 1000)), radius);
+                     snapLoc = ((tileY + 1) * 1000) + offset;
                      break;
                   }
                }
