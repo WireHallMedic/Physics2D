@@ -67,9 +67,6 @@ public class MovingBC extends BoundingCircle implements MovingBS
       stepOriginX = originX + xSpeed;
       stepOriginY = originY + ySpeed;
       
-      boolean stopHoriz = false;
-      boolean stopVert = false;
-      
       // corporeal objects check if they would collide with level geometry, stopping if they would.
       // if moving diagionally, one tile is checked twice, but this is fast enough it shouldn't be
       // a problem
@@ -116,15 +113,15 @@ public class MovingBC extends BoundingCircle implements MovingBS
       // check down
       if(ySpeed > 0)
       {
-         // bottom left
+         // bottom center
          tileX = xPos / 1000;
          tileY = (yPos + radius) / 1000;
          if(blocked(tileX, tileY, geoMap))
-            collision++;
+            collision++;/*
          // bottom right
          tileX = (xPos + radius) / 1000;
          if((blocked(tileX, tileY, geoMap)))
-            collision++;
+            collision++;*/
          if(collision > 0)
          {
             snapLoc = (tileY * 1000) - radius;
@@ -133,15 +130,15 @@ public class MovingBC extends BoundingCircle implements MovingBS
       // check up
       else if(ySpeed < 0)
       {
-         // upper left
+         // up center
          tileX = xPos / 1000;
-         tileY = yPos / 1000;
+         tileY = (yPos - radius) / 1000;
          if(blocked(tileX, tileY, geoMap))
             collision++;
          // upper right
-         tileX = (xPos + radius) / 1000;
+      /*   tileX = (xPos + radius) / 1000;
          if((blocked(tileX, tileY, geoMap)))
-            collision++;
+            collision++;*/
          if(collision > 0)
          {
             snapLoc = (tileY + 1) * 1000;
@@ -161,15 +158,15 @@ public class MovingBC extends BoundingCircle implements MovingBS
       // check right
       if(xSpeed > 0)
       {
-         // upper right
+         // right center
          tileX = (xPos + radius) / 1000;
          tileY = yPos / 1000;
          if(blocked(tileX, tileY, geoMap))
             collision++;
-         // bottom right
+    /*     // bottom right
          tileY = (yPos + radius) / 1000;
          if((blocked(tileX, tileY, geoMap)))
-            collision++;
+            collision++;*/
          if(collision > 0)
          {
             snapLoc = (tileX - 1) * 1000;
@@ -178,15 +175,15 @@ public class MovingBC extends BoundingCircle implements MovingBS
       // check left
       else if(xSpeed < 0)
       {
-         // upper left
-         tileX = xPos / 1000;
+         // left center
+         tileX = (xPos + radius) / 1000;
          tileY = yPos / 1000;
          if(blocked(tileX, tileY, geoMap))
             collision++;
-         // bottom left
+   /*      // bottom left
          tileY = (yPos + radius) / 1000;
          if((blocked(tileX, tileY, geoMap)))
-            collision++;
+            collision++;*/
          if(collision > 0)
          {
             snapLoc = (tileX + 1) * 1000;
