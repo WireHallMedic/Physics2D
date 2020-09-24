@@ -210,8 +210,8 @@ public class MovingBC extends BoundingCircle implements MovingBS
             {
                if(blocked(tileX, tileY, geoMap))
                {
-                  if(pointIsIn(tileX * 1000, tileY * 1000) ||
-                     pointIsIn(tileX * 1000, (tileY + 1) * 1000))
+                  if(pointIsIn((tileX + 1) * 1000, tileY * 1000) ||
+                     pointIsIn((tileX + 1) * 1000, (tileY + 1) * 1000))
                      snapLoc = ((tileX + 1) * 1000) + radius;
                }
             }
