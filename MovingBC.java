@@ -153,7 +153,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
                {
                   if(pointIsIn(tileX * 1000, tileY * 1000) ||
                      pointIsIn((tileX + 1) * 1000, tileY * 1000))
-                     snapLoc = (tileY * 1000) - radius;
+                     snapLoc = ((tileY + 1) * 1000) + radius;
                }
             }
          }
@@ -166,7 +166,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
    {
       int tileX;
       int tileY;
-      int collision = 0;
+      int tileMax;
       int snapLoc = -1;
       
       // check right
@@ -179,6 +179,19 @@ public class MovingBC extends BoundingCircle implements MovingBS
          {
             snapLoc = (tileX * 1000) - radius;
          }
+         else // check for corners in circle
+         {
+            tileMax = (yPos + radius) / 1000;
+            for(tileY = (yPos - radius) / 1000; tileY <= tileMax; tileY++)
+            {
+               if(blocked(tileX, tileY, geoMap))
+               {
+                  if(pointIsIn(tileX * 1000, tileY * 1000) ||
+                     pointIsIn(tileX * 1000, (tileY + 1) * 1000))
+                     snapLoc = (tileX * 1000) - radius;
+               }
+            }
+         }
       }
       // check left
       else if(xSpeed < 0)
@@ -189,6 +202,19 @@ public class MovingBC extends BoundingCircle implements MovingBS
          if(blocked(tileX, tileY, geoMap))
          {
             snapLoc = ((tileX + 1) * 1000) + radius;
+         }
+         else // check for corners in circle
+         {
+            tileMax = (yPos + radius) / 1000;
+            for(tileY = (yPos - radius) / 1000; tileY <= tileMax; tileY++)
+            {
+               if(blocked(tileX, tileY, geoMap))
+               {
+                  if(pointIsIn(tileX * 1000, tileY * 1000) ||
+                     pointIsIn(tileX * 1000, (tileY + 1) * 1000))
+                     snapLoc = ((tileX + 1) * 1000) + radius;
+               }
+            }
          }
       }
       return snapLoc;
