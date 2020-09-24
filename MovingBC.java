@@ -108,8 +108,9 @@ public class MovingBC extends BoundingCircle implements MovingBS
    {
       int tileX;
       int tileY;
-      int tileMax;
       int snapLoc = -1;
+      int start;
+      int end;
       
       // check down
       if(ySpeed > 0)
@@ -123,14 +124,17 @@ public class MovingBC extends BoundingCircle implements MovingBS
          }
          else // check for corners in circle
          {
-            tileMax = ((xPos + radius) / 1000) + 1;
-            for(tileX = (xPos - radius) / 1000; tileX <= tileMax; tileX++)
+            start = (xPos - radius + sensorInset) / 1000;
+            end = (xPos + radius - sensorInset) / 1000;
+            int cornersToCheck = end - start;
+            for(int i = 0; i < cornersToCheck; i++)
             {
-               if(blocked(tileX, tileY, geoMap) || blocked(tileX - 1, tileY, geoMap))
+               tileX = ((xPos - radius) / 1000) + i;
+               if(blocked(tileX, tileY, geoMap) || blocked(tileX + 1, tileY, geoMap))
                {
-                  if(pointIsIn(tileX * 1000, tileY * 1000))
+                  if(pointIsIn((tileX + 1) * 1000, tileY * 1000)) // check upper right corner of tile
                   {
-                     int offset = P2DTools.getPythag(Math.abs(xPos - (tileX * 1000)), radius);
+                     int offset = P2DTools.getPythag(Math.abs(xPos - ((tileX + 1) * 1000)), radius);
                      snapLoc = (tileY * 1000) - offset;
                      break;
                   }
@@ -150,14 +154,17 @@ public class MovingBC extends BoundingCircle implements MovingBS
          }
          else // check for corners in circle
          {
-            tileMax = ((xPos + radius) / 1000) + 1;
-            for(tileX = (xPos - radius) / 1000; tileX <= tileMax; tileX++)
+            start = (xPos - radius + sensorInset) / 1000;
+            end = (xPos + radius - sensorInset) / 1000;
+            int cornersToCheck = end - start;
+            for(int i = 0; i < cornersToCheck; i++)
             {
-               if(blocked(tileX, tileY, geoMap) || blocked(tileX - 1, tileY, geoMap))
+               tileX = ((xPos - radius) / 1000) + i;
+               if(blocked(tileX, tileY, geoMap) || blocked(tileX + 1, tileY, geoMap))
                {
-                  if(pointIsIn(tileX * 1000, (tileY + 1) * 1000))
+                  if(pointIsIn((tileX + 1) * 1000, (tileY + 1) * 1000)) // check lower right corner of tile
                   {
-                     int offset = P2DTools.getPythag(Math.abs(xPos - (tileX * 1000)), radius);
+                     int offset = P2DTools.getPythag(Math.abs(xPos - ((tileX + 1) * 1000)), radius);
                      snapLoc = ((tileY + 1) * 1000) + offset;
                      break;
                   }
