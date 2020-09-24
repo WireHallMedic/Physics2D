@@ -163,7 +163,7 @@ public class MovingAABB extends AABB implements MovingBS
             }
          if(collision)
          {
-            snapLoc = (tileY * 1000) - height;
+            snapLoc = (tileY + 1) * 1000;
          }
       }
       return snapLoc;
@@ -192,7 +192,7 @@ public class MovingAABB extends AABB implements MovingBS
             }
          if(collision)
          {
-            snapLoc = (tileX - 1) * 1000;
+            snapLoc = (tileX * 1000) - width;
          }
       }
       // check left
@@ -209,7 +209,7 @@ public class MovingAABB extends AABB implements MovingBS
             }
          if(collision)
          {
-            snapLoc = (tileX - 1) * 1000;
+            snapLoc = (tileX + 1) * 1000;
          }
       }
       return snapLoc;

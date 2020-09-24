@@ -107,7 +107,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
    {
       int tileX;
       int tileY;
-      int collision = 0;
+      int tileMax;
       int snapLoc = -1;
       
       // check down
@@ -120,6 +120,19 @@ public class MovingBC extends BoundingCircle implements MovingBS
          {
             snapLoc = (tileY * 1000) - radius;
          }
+         else // check for corners in circle
+         {
+            tileMax = (xPos + radius) / 1000;
+            for(tileX = (xPos - radius) / 1000; tileX <= tileMax; tileX++)
+            {
+               if(blocked(tileX, tileY, geoMap))
+               {
+                  if(pointIsIn(tileX * 1000, tileY * 1000) ||
+                     pointIsIn((tileX + 1) * 1000, tileY * 1000))
+                     snapLoc = (tileY * 1000) - radius;
+               }
+            }
+         }
       }
       // check up
       else if(ySpeed < 0)
@@ -130,6 +143,19 @@ public class MovingBC extends BoundingCircle implements MovingBS
          if(blocked(tileX, tileY, geoMap))
          {
             snapLoc = ((tileY + 1) * 1000) + radius;
+         }
+         else // check for corners in circle
+         {
+            tileMax = (xPos + radius) / 1000;
+            for(tileX = (xPos - radius) / 1000; tileX <= tileMax; tileX++)
+            {
+               if(blocked(tileX, tileY, geoMap))
+               {
+                  if(pointIsIn(tileX * 1000, tileY * 1000) ||
+                     pointIsIn((tileX + 1) * 1000, tileY * 1000))
+                     snapLoc = (tileY * 1000) - radius;
+               }
+            }
          }
       }
       return snapLoc;
