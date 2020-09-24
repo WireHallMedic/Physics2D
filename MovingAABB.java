@@ -127,10 +127,9 @@ public class MovingAABB extends AABB implements MovingBS
    private int getVertSnapLoc(int xPos, int yPos, GeometryBlock[][] geoMap)
    {
       int tileXStart;
-      int tileYStart;
       int tileXEnd;
       int tileY;
-      int collision = 0;
+      boolean collision = false;
       int snapLoc = -1;
       
       // check down
@@ -141,8 +140,11 @@ public class MovingAABB extends AABB implements MovingBS
          tileY = (yPos + height) / 1000;
          for(int x = tileXStart; x <= tileXEnd; x++)
             if(blocked(x, tileY, geoMap))
-               collision++;
-         if(collision > 0)
+            {
+               collision = true;
+               break;
+            }
+         if(collision)
          {
             snapLoc = (tileY * 1000) - height;
          }
@@ -155,8 +157,11 @@ public class MovingAABB extends AABB implements MovingBS
          tileY = yPos / 1000;
          for(int x = tileXStart; x <= tileXEnd; x++)
             if(blocked(x, tileY, geoMap))
-               collision++;
-         if(collision > 0)
+            {
+               collision = true;
+               break;
+            }
+         if(collision)
          {
             snapLoc = (tileY * 1000) - height;
          }
@@ -168,23 +173,24 @@ public class MovingAABB extends AABB implements MovingBS
    private int getHorizSnapLoc(int xPos, int yPos, GeometryBlock[][] geoMap)
    {
       int tileX;
-      int tileY;
-      int collision = 0;
+      int tileYStart;
+      int tileYEnd;
+      boolean collision = false;
       int snapLoc = -1;
       
       // check right
       if(xSpeed > 0)
       {
-         // upper right
          tileX = (xPos + width) / 1000;
-         tileY = (yPos + impactSensorOffset) / 1000;
-         if(blocked(tileX, tileY, geoMap))
-            collision++;
-         // bottom right
-         tileY = (yPos + height - impactSensorOffset) / 1000;
-         if((blocked(tileX, tileY, geoMap)))
-            collision++;
-         if(collision > 0)
+         tileYStart = (yPos + impactSensorOffset) / 1000;         // top
+         tileYEnd = (yPos + height - impactSensorOffset) / 1000;  // bottom
+         for(int y = tileYStart; y <= tileYEnd; y++)
+            if(blocked(tileX, y, geoMap))
+            {
+               collision = true;
+               break;
+            }
+         if(collision)
          {
             snapLoc = (tileX - 1) * 1000;
          }
@@ -192,18 +198,18 @@ public class MovingAABB extends AABB implements MovingBS
       // check left
       else if(xSpeed < 0)
       {
-         // upper left
          tileX = xPos / 1000;
-         tileY = (yPos + impactSensorOffset) / 1000;
-         if(blocked(tileX, tileY, geoMap))
-            collision++;
-         // bottom left
-         tileY = (yPos + height - impactSensorOffset) / 1000;
-         if((blocked(tileX, tileY, geoMap)))
-            collision++;
-         if(collision > 0)
+         tileYStart = (yPos + impactSensorOffset) / 1000;         // top
+         tileYEnd = (yPos + height - impactSensorOffset) / 1000;  // bottom
+         for(int y = tileYStart; y <= tileYEnd; y++)
+            if(blocked(tileX, y, geoMap))
+            {
+               collision = true;
+               break;
+            }
+         if(collision)
          {
-            snapLoc = (tileX + 1) * 1000;
+            snapLoc = (tileX - 1) * 1000;
          }
       }
       return snapLoc;
