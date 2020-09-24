@@ -122,14 +122,17 @@ public class MovingBC extends BoundingCircle implements MovingBS
          }
          else // check for corners in circle
          {
-            tileMax = (xPos + radius) / 1000;
+            tileMax = ((xPos + radius) / 1000) + 1;
             for(tileX = (xPos - radius) / 1000; tileX <= tileMax; tileX++)
             {
-               if(blocked(tileX, tileY, geoMap))
+               if(blocked(tileX, tileY, geoMap) || blocked(tileX - 1, tileY, geoMap))
                {
-                  if(pointIsIn(tileX * 1000, tileY * 1000) ||
-                     pointIsIn((tileX + 1) * 1000, tileY * 1000))
-                     snapLoc = (tileY * 1000) - radius;
+                  if(pointIsIn(tileX * 1000, tileY * 1000))
+                  {
+                     int offset = Math.abs(xPos - (tileX * 1000));
+                     snapLoc = (tileY * 1000) - radius + offset;
+                     break;
+                  }
                }
             }
          }
@@ -153,7 +156,10 @@ public class MovingBC extends BoundingCircle implements MovingBS
                {
                   if(pointIsIn(tileX * 1000, tileY * 1000) ||
                      pointIsIn((tileX + 1) * 1000, tileY * 1000))
+                  {
                      snapLoc = ((tileY + 1) * 1000) + radius;
+                     break;
+                  }
                }
             }
          }
@@ -188,7 +194,10 @@ public class MovingBC extends BoundingCircle implements MovingBS
                {
                   if(pointIsIn(tileX * 1000, tileY * 1000) ||
                      pointIsIn(tileX * 1000, (tileY + 1) * 1000))
+                  {
                      snapLoc = (tileX * 1000) - radius;
+                     break;
+                  }
                }
             }
          }
@@ -212,7 +221,10 @@ public class MovingBC extends BoundingCircle implements MovingBS
                {
                   if(pointIsIn((tileX + 1) * 1000, tileY * 1000) ||
                      pointIsIn((tileX + 1) * 1000, (tileY + 1) * 1000))
+                  {
                      snapLoc = ((tileX + 1) * 1000) + radius;
+                     break;
+                  }
                }
             }
          }

@@ -16,6 +16,14 @@ public class P2DTools
 		return (a * a) + (b * b);
    }
    
+   // returns the unknown side (non-hypotenouse) of a right triangle. call sparingly
+   public static int getPythag(int a, int b)
+   {
+      if(a > b)
+         return (int)Math.sqrt((a * a) - (b * b));
+      return (int)Math.sqrt((b * b) - (a * a));
+   }
+   
    public static boolean pointIsInBox(int x, int y, int boxOriginX, int boxOriginY, int boxWidth, int boxHeight)
    {
       return x >= boxOriginX && x <= boxOriginX + boxWidth && 
