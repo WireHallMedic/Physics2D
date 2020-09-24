@@ -153,42 +153,8 @@ public class TopDownPhysicsTest2 extends JPanel implements KeyListener, ActionLi
                  P2DManager.millitileToPixel(r + r));
       
       g.setColor(Color.YELLOW);
-      g.fillRect(P2DManager.millitileToPixel(player.getOriginX()), P2DManager.millitileToPixel(player.getOriginY()), 
+      g.fillOval(P2DManager.millitileToPixel(player.getOriginX() - 500), P2DManager.millitileToPixel(player.getOriginY() - 500), 
                        TILE_SIZE, TILE_SIZE);
-      
-      int sensorInset = P2DManager.millitileToPixel(player.impactSensorOffset);
-      int sensorLength = TILE_SIZE - sensorInset - sensorInset;
-      int playerXLoc = P2DManager.millitileToPixel(player.getOriginX());
-      int playerYLoc = P2DManager.millitileToPixel(player.getOriginY());
-      g.setColor(Color.RED);
-      
-      if(player.topSensor())
-         g.setColor(Color.RED);
-      else
-         g.setColor(Color.GREEN.darker());
-      g.fillRect(playerXLoc + sensorInset, playerYLoc, 
-                 sensorLength, 4);
-         
-      if(player.bottomSensor())
-         g.setColor(Color.RED);
-      else
-         g.setColor(Color.GREEN.darker());
-      g.fillRect(playerXLoc + sensorInset, playerYLoc + TILE_SIZE - 4, 
-                 sensorLength, 4);
-         
-      if(player.rightSensor())
-         g.setColor(Color.RED);
-      else
-         g.setColor(Color.GREEN.darker());
-      g.fillRect(playerXLoc + TILE_SIZE - 4, playerYLoc + sensorInset, 
-                 4, sensorLength);
-         
-      if(player.leftSensor())
-         g.setColor(Color.RED);
-      else
-         g.setColor(Color.GREEN.darker());
-      g.fillRect(playerXLoc, playerYLoc + sensorInset, 
-                 4, sensorLength);
    }
    
    public static void main(String[] args)
