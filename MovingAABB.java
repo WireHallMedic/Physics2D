@@ -126,7 +126,9 @@ public class MovingAABB extends AABB implements MovingBS
    // returns either the millitile y location to snap to, or -1
    private int getVertSnapLoc(int xPos, int yPos, GeometryBlock[][] geoMap)
    {
-      int tileX;
+      int tileXStart;
+      int tileYStart;
+      int tileXEnd;
       int tileY;
       int collision = 0;
       int snapLoc = -1;
@@ -134,15 +136,12 @@ public class MovingAABB extends AABB implements MovingBS
       // check down
       if(ySpeed > 0)
       {
-         // bottom left
-         tileX = (xPos + impactSensorOffset) / 1000;
+         tileXStart = (xPos + impactSensorOffset) / 1000;         // bottom left
+         tileXEnd = (xPos + width - impactSensorOffset) / 1000;   // bottom right
          tileY = (yPos + height) / 1000;
-         if(blocked(tileX, tileY, geoMap))
-            collision++;
-         // bottom right
-         tileX = (xPos + width - impactSensorOffset) / 1000;
-         if((blocked(tileX, tileY, geoMap)))
-            collision++;
+         for(int x = tileXStart; x <= tileXEnd; x++)
+            if(blocked(x, tileY, geoMap))
+               collision++;
          if(collision > 0)
          {
             snapLoc = (tileY * 1000) - height;
@@ -151,18 +150,15 @@ public class MovingAABB extends AABB implements MovingBS
       // check up
       else if(ySpeed < 0)
       {
-         // upper left
-         tileX = (xPos + impactSensorOffset) / 1000;
+         tileXStart = (xPos + impactSensorOffset) / 1000;         // upper left
+         tileXEnd = (xPos + width - impactSensorOffset) / 1000;   // upper right
          tileY = yPos / 1000;
-         if(blocked(tileX, tileY, geoMap))
-            collision++;
-         // upper right
-         tileX = (xPos + width - impactSensorOffset) / 1000;
-         if((blocked(tileX, tileY, geoMap)))
-            collision++;
+         for(int x = tileXStart; x <= tileXEnd; x++)
+            if(blocked(x, tileY, geoMap))
+               collision++;
          if(collision > 0)
          {
-            snapLoc = (tileY + 1) * 1000;
+            snapLoc = (tileY * 1000) - height;
          }
       }
       return snapLoc;
