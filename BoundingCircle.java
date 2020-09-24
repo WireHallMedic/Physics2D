@@ -14,7 +14,8 @@ public class BoundingCircle implements BoundingShape
 	protected int originX;
 	protected int originY;
 	protected int radius;
-   protected int radiusSquared;    // memoization
+   protected int radiusSquared;     // memoization
+   protected int orthoToDiag;       // also memoization
 
 
 	public int getOriginX(){return originX;}
@@ -25,8 +26,8 @@ public class BoundingCircle implements BoundingShape
 
 	public void setOriginX(int o){originX = o;}
 	public void setOriginY(int o){originY = o;}
-	public void setRadius(int r){radius = r; radiusSquared = r * r;}
-	public void setDiameter(int d){radius = d / 2; radiusSquared = radius * radius;}
+	public void setRadius(int r){radius = r; setDerivedValues();}
+	public void setDiameter(int d){radius = d / 2; setDerivedValues();}
    public void setOrigin(int x, int y){setOriginX(x); setOriginY(y);}
    
 
@@ -44,6 +45,12 @@ public class BoundingCircle implements BoundingShape
    {
       setDiameter(d);
       setOrigin(x, y);
+   }
+   
+   private void setDerivedValues()
+   {
+      radiusSquared = radius * radius;
+      orthoToDiag = (int)(radius * .707);
    }
    
    public boolean pointIsIn(int x, int y)

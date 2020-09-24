@@ -36,14 +36,14 @@ public class MovingBC extends BoundingCircle implements MovingBS
       this(1000, 0, 0);
    }
 
-   public MovingBC(int r)
+   public MovingBC(int d)
    {
-      this(r, 0, 0);
+      this(d, 0, 0);
    }
 
-   public MovingBC(int r, int x, int y)
+   public MovingBC(int d, int x, int y)
    {
-      super(r, x, y);
+      super(d, x, y);
    	setCorporeal(false);
    }
 
