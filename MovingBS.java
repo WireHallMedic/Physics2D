@@ -14,12 +14,15 @@ public interface MovingBS
 	public boolean isCorporeal();
    public int getCenterX();
 	public int getCenterY();
+   public boolean isFollower();
+   public MovingBS getLeader();
 
 	public void setXSpeed(int x);
 	public void setYSpeed(int y);
    public void setSpeed(int x, int y);
 	public void setAffectedByGravity(boolean a);
 	public void setCorporeal(boolean c);
+   public void setLeader(MovingBS l);
    
    public void applyImpulse(int x, int y);
    public void doPhysics(GeometryBlock[][] geoMap);
