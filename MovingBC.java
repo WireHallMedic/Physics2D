@@ -47,6 +47,17 @@ public class MovingBC extends BoundingCircle implements MovingBS
       super(d, x, y);
    	setCorporeal(false);
    }
+   
+   public int getCenterX()
+   {
+      return getOriginX();
+   }
+   
+   
+	public int getCenterY()
+   {
+      return getOriginY();
+   }
 
    // x and y are in tiles
    private boolean blocked(int x, int y, GeometryBlock[][] geoMap)

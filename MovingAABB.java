@@ -56,13 +56,13 @@ public class MovingAABB extends AABB implements MovingBS
    	setCorporeal(false);
    }
    
-   public int getOriginX()
+   public int getCenterX()
    {
       return getOriginX() + getHalfWidth();
    }
    
    
-	public int getOriginY()
+	public int getCenterY()
    {
       return getOriginY() + getHalfHeight();
    }
