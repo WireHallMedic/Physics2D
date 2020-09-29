@@ -21,6 +21,7 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
    private boolean rightHeld = false;
    
    private MovingAABB player;
+   private MovingBC nad;
    
    public PhysicsTest()
    {
@@ -31,6 +32,9 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
       player = new MovingAABB(1000, 1000, 2000, 2000);
       player.setAffectedByGravity(true);
       player.setCorporeal(true);
+      
+      nad = new MovingBC(500, 0, -1000);
+      nad.setLeader(player);
       
       blockMap = genBlockMap();
       
@@ -120,7 +124,15 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
       g.fillRect(P2DManager.millitileToPixel(player.getOriginX()), P2DManager.millitileToPixel(player.getOriginY()), 
                        TILE_SIZE, TILE_SIZE);
       
-      int sensorInset = P2DManager.millitileToPixel(player.impactSensorOffset);
+      // the nad
+      g.setColor(Color.ORANGE);
+      int nadRad = P2DManager.millitileToPixel(nad.getRadius());
+      g.fillOval(P2DManager.millitileToPixel(nad.getOriginX() - nadRad), 
+                        P2DManager.millitileToPixel(nad.getOriginY() - nadRad), 
+                        nadRad * 2, nadRad * 2);
+                       
+      // player sensors
+      int sensorInset = P2DManager.millitileToPixel(player.sensorInset);
       int sensorLength = TILE_SIZE - sensorInset - sensorInset;
       int playerXLoc = P2DManager.millitileToPixel(player.getOriginX());
       int playerYLoc = P2DManager.millitileToPixel(player.getOriginY());
