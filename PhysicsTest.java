@@ -127,8 +127,8 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
       // the nad
       g.setColor(Color.ORANGE);
       int nadRad = P2DManager.millitileToPixel(nad.getRadius());
-      g.fillOval(P2DManager.millitileToPixel(nad.getOriginX() - nadRad), 
-                        P2DManager.millitileToPixel(nad.getOriginY() - nadRad), 
+      g.fillOval(P2DManager.millitileToPixel(nad.getOriginX()) - nadRad, 
+                        P2DManager.millitileToPixel(nad.getOriginY()) - nadRad, 
                         nadRad * 2, nadRad * 2);
                        
       // player sensors
