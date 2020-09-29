@@ -60,6 +60,22 @@ public class MovingAABB extends AABB implements MovingBS
    	setCorporeal(false);
    }
    
+   @Override
+   public int getOriginX()
+   {
+      if(isFollower())
+         return getLeader().getCenterX() + super.getOriginX();
+      return super.getOriginX();
+   }
+   
+   @Override
+   public int getOriginY()
+   {
+      if(isFollower())
+         return getLeader().getCenterY() + super.getOriginY();
+      return super.getOriginY();
+   }
+   
    public int getCenterX()
    {
       return getOriginX() + getHalfWidth();
@@ -93,8 +109,8 @@ public class MovingAABB extends AABB implements MovingBS
       if(affectedByGravity)
          ySpeed = Math.min(ySpeed + P2DManager.getGravity(localGravity), 
                            P2DManager.getTerminalVelocity(localGravity));
-      stepOriginX = originX + xSpeed;
-      stepOriginY = originY + ySpeed;
+      stepOriginX = getOriginX() + xSpeed;
+      stepOriginY = getOriginY() + ySpeed;
       
       boolean stopHoriz = false;
       boolean stopVert = false;
@@ -105,7 +121,7 @@ public class MovingAABB extends AABB implements MovingBS
       if(corporeal)
       {
          // check and resolve horizontal movement
-         int snapLocX = getHorizSnapLoc(stepOriginX, originY, geoMap);
+         int snapLocX = getHorizSnapLoc(stepOriginX, getOriginY(), geoMap);
          if(snapLocX != -1)
          {
             stepOriginX = snapLocX;
@@ -133,8 +149,8 @@ public class MovingAABB extends AABB implements MovingBS
       }
       
       // set to final position. Directly accessing because of tile/millitile conversion.
-      originX = stepOriginX;
-      originY = stepOriginY;
+      setOriginX(stepOriginX);
+      setOriginY(stepOriginY);
    }
    
    // returns either the millitile y location to snap to, or -1
@@ -150,8 +166,8 @@ public class MovingAABB extends AABB implements MovingBS
       if(ySpeed > 0)
       {
          tileXStart = (xPos + sensorInset) / 1000;         // bottom left
-         tileXEnd = (xPos + width - sensorInset) / 1000;   // bottom right
-         tileY = (yPos + height) / 1000;
+         tileXEnd = (xPos + getWidth() - sensorInset) / 1000;   // bottom right
+         tileY = (yPos + getHeight()) / 1000;
          for(int x = tileXStart; x <= tileXEnd; x++)
             if(blocked(x, tileY, geoMap))
             {
@@ -160,14 +176,14 @@ public class MovingAABB extends AABB implements MovingBS
             }
          if(collision)
          {
-            snapLoc = (tileY * 1000) - height;
+            snapLoc = (tileY * 1000) - getHeight();
          }
       }
       // check up
       else if(ySpeed < 0)
       {
          tileXStart = (xPos + sensorInset) / 1000;         // upper left
-         tileXEnd = (xPos + width - sensorInset) / 1000;   // upper right
+         tileXEnd = (xPos + getWidth() - sensorInset) / 1000;   // upper right
          tileY = yPos / 1000;
          for(int x = tileXStart; x <= tileXEnd; x++)
             if(blocked(x, tileY, geoMap))
@@ -195,9 +211,9 @@ public class MovingAABB extends AABB implements MovingBS
       // check right
       if(xSpeed > 0)
       {
-         tileX = (xPos + width) / 1000;
+         tileX = (xPos + getWidth()) / 1000;
          tileYStart = (yPos + sensorInset) / 1000;         // top
-         tileYEnd = (yPos + height - sensorInset) / 1000;  // bottom
+         tileYEnd = (yPos + getHeight() - sensorInset) / 1000;  // bottom
          for(int y = tileYStart; y <= tileYEnd; y++)
             if(blocked(tileX, y, geoMap))
             {
@@ -206,7 +222,7 @@ public class MovingAABB extends AABB implements MovingBS
             }
          if(collision)
          {
-            snapLoc = (tileX * 1000) - width;
+            snapLoc = (tileX * 1000) - getWidth();
          }
       }
       // check left
@@ -214,7 +230,7 @@ public class MovingAABB extends AABB implements MovingBS
       {
          tileX = xPos / 1000;
          tileYStart = (yPos + sensorInset) / 1000;         // top
-         tileYEnd = (yPos + height - sensorInset) / 1000;  // bottom
+         tileYEnd = (yPos + getHeight() - sensorInset) / 1000;  // bottom
          for(int y = tileYStart; y <= tileYEnd; y++)
             if(blocked(tileX, y, geoMap))
             {
@@ -232,19 +248,19 @@ public class MovingAABB extends AABB implements MovingBS
    private void updateSensors(int x, int y, GeometryBlock[][] geoMap)
    {
       // horizontal checks
-      int tileX1 = (x + width + 1) / 1000;                    // right
+      int tileX1 = (x + getWidth() + 1) / 1000;                    // right
       int tileX2 = (x - 1) / 1000;                            // left
       int tileY1 = (y + sensorInset) / 1000;           // top
-      int tileY2 = (y + height - sensorInset) / 1000;  // bottom
+      int tileY2 = (y + getHeight() - sensorInset) / 1000;  // bottom
       
       rightSensor = blocked(tileX1, tileY1, geoMap) || blocked(tileX1, tileY2, geoMap);
       leftSensor = blocked(tileX2, tileY1, geoMap) || blocked(tileX2, tileY2, geoMap);
       
       // vertical checks
-      tileY1 = (y + height + 1) / 1000;                       // bottom
+      tileY1 = (y + getHeight() + 1) / 1000;                       // bottom
       tileY2 = (y - 1) / 1000;                                // top
       tileX1 = (x + sensorInset) / 1000;               // left
-      tileX2 = (x + width - sensorInset) / 1000;       // right
+      tileX2 = (x + getWidth() - sensorInset) / 1000;       // right
       
       bottomSensor = blocked(tileX1, tileY1, geoMap) || blocked(tileX2, tileY1, geoMap);
       topSensor = blocked(tileX1, tileY2, geoMap) || blocked(tileX2, tileY2, geoMap);
@@ -261,9 +277,9 @@ public class MovingAABB extends AABB implements MovingBS
       if(bottomSensor)
       {
          int index = -1;
-         int tileY = (originY + height) / 1000;                        // bottom
-         int tileX1 = (originX + sensorInset) / 1000;               // left
-         int tileX2 = (originX + width - sensorInset) / 1000;       // right
+         int tileY = (getOriginY() + getHeight()) / 1000;                        // bottom
+         int tileX1 = (getOriginX() + sensorInset) / 1000;               // left
+         int tileX2 = (getOriginX() + getWidth() - sensorInset) / 1000;       // right
          for(int x = tileX1; x <= tileX2; x++)
             index = Math.max(index, geoMap[x][tileY].getFrictionIndex());
          return P2DManager.getFriction(index);
@@ -274,10 +290,10 @@ public class MovingAABB extends AABB implements MovingBS
    // returns the highest-indexed gravity used by one of the blocks which contains part of this AABB
    public int getGravity(GeometryBlock[][] geoMap)
    {
-      int tileX1 = originX / 1000;
-      int tileY1 = originY / 1000;
-      int tileX2 = (originX + width - 1) / 1000;
-      int tileY2 = (originY + height - 1) / 1000;
+      int tileX1 = getOriginX() / 1000;
+      int tileY1 = getOriginY() / 1000;
+      int tileX2 = (getOriginX() + getWidth() - 1) / 1000;
+      int tileY2 = (getOriginY() + getHeight() - 1) / 1000;
       int grav = 0;
       for(int x = tileX1; x <= tileX2; x++)
       for(int y = tileY1; y <= tileY2; y++)
@@ -291,10 +307,10 @@ public class MovingAABB extends AABB implements MovingBS
    // returns the highest indexed friction of tiles occupied by the AABB
    public double getTopDownFriction(GeometryBlock[][] geoMap)
    {
-      int tileX1 = originX / 1000;
-      int tileY1 = originY / 1000;
-      int tileX2 = (originX + width - 1) / 1000;
-      int tileY2 = (originY + height - 1) / 1000;
+      int tileX1 = getOriginX() / 1000;
+      int tileY1 = getOriginY() / 1000;
+      int tileX2 = (getOriginX() + getWidth() - 1) / 1000;
+      int tileY2 = (getOriginY() + getHeight() - 1) / 1000;
       int frict = 0;
       for(int x = tileX1; x <= tileX2; x++)
       for(int y = tileY1; y <= tileY2; y++)
@@ -304,10 +320,10 @@ public class MovingAABB extends AABB implements MovingBS
    // returns the highest indexed speedMult of tiles occupied by the AABB
    public double getTopDownSpeedMult(GeometryBlock[][] geoMap)
    {
-      int tileX1 = originX / 1000;
-      int tileY1 = originY / 1000;
-      int tileX2 = (originX + width - 1) / 1000;
-      int tileY2 = (originY + height - 1) / 1000;
+      int tileX1 = getOriginX() / 1000;
+      int tileY1 = getOriginY() / 1000;
+      int tileX2 = (getOriginX() + getWidth() - 1) / 1000;
+      int tileY2 = (getOriginY() + getHeight() - 1) / 1000;
       
       int smi = 0;
       for(int x = tileX1; x <= tileX2; x++)

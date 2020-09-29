@@ -52,6 +52,22 @@ public class MovingBC extends BoundingCircle implements MovingBS
    	setCorporeal(false);
    }
    
+   @Override
+   public int getOriginX()
+   {
+      if(isFollower())
+         return getLeader().getCenterX() + super.getOriginX();
+      return super.getOriginX();
+   }
+   
+   @Override
+   public int getOriginY()
+   {
+      if(isFollower())
+         return getLeader().getCenterY() + super.getOriginY();
+      return super.getOriginY();
+   }
+   
    public int getCenterX()
    {
       return getOriginX();
