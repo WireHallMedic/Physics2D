@@ -55,6 +55,17 @@ public class MovingAABB extends AABB implements MovingBS
    	setAffectedByGravity(false);
    	setCorporeal(false);
    }
+   
+   public int getOriginX()
+   {
+      return getOriginX() + getHalfWidth();
+   }
+   
+   
+	public int getOriginY()
+   {
+      return getOriginY() + getHalfHeight();
+   }
 
    // x and y are in tiles
    private boolean blocked(int x, int y, GeometryBlock[][] geoMap)
