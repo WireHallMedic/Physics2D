@@ -17,12 +17,15 @@ public class MovingBC extends BoundingCircle implements MovingBS
 	private int stepOriginX;      // used to avoid moving into walls
 	private int stepOriginY;
    public static final int sensorInset = 10;
+   private MovingBS leader = null;
 
 
 	public int getXSpeed(){return xSpeed;}
 	public int getYSpeed(){return ySpeed;}
 	public boolean isAffectedByGravity(){return affectedByGravity;}
 	public boolean isCorporeal(){return corporeal;}
+   public boolean isFollower(){return leader != null;}
+   public MovingBS getLeader(){return leader;}
 
 
 	public void setXSpeed(int x){xSpeed = x;}
@@ -30,6 +33,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
    public void setSpeed(int x, int y){xSpeed = x; ySpeed = y;}
 	public void setAffectedByGravity(boolean a){affectedByGravity = a;}
 	public void setCorporeal(boolean c){corporeal = c;}
+   public void setLeader(MovingBS l){leader = l;}
 
    
    public MovingBC()

@@ -20,6 +20,7 @@ public class MovingAABB extends AABB implements MovingBS
    private boolean topSensor = false;
    private boolean rightSensor = false;
    private boolean leftSensor = false;
+   private MovingBS leader = null;
 
 
 	public int getXSpeed(){return xSpeed;}
@@ -30,6 +31,8 @@ public class MovingAABB extends AABB implements MovingBS
    public boolean topSensor(){return topSensor;}
    public boolean leftSensor(){return leftSensor;}
    public boolean rightSensor(){return rightSensor;}
+   public boolean isFollower(){return leader != null;}
+   public MovingBS getLeader(){return leader;}
 
 
 	public void setXSpeed(int x){xSpeed = x;}
@@ -37,6 +40,7 @@ public class MovingAABB extends AABB implements MovingBS
    public void setSpeed(int x, int y){xSpeed = x; ySpeed = y;}
 	public void setAffectedByGravity(boolean a){affectedByGravity = a;}
 	public void setCorporeal(boolean c){corporeal = c;}
+   public void setLeader(MovingBS l){leader = l;}
 
    
    public MovingAABB()
