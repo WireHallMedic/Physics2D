@@ -12,6 +12,8 @@ public interface MovingBS
 	public int getYSpeed();
 	public boolean isAffectedByGravity();
 	public boolean isCorporeal();
+   public int getCenterX();
+	public int getCenterY();
 
 	public void setXSpeed(int x);
 	public void setYSpeed(int y);
