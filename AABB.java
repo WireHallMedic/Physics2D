@@ -9,12 +9,12 @@ package Physics2D;
 
 public class AABB implements BoundingShape
 {
-	protected int originX;
-	protected int originY;
-	protected int height;
-	protected int width;
-	protected int halfHeight;
-	protected int halfWidth;
+	private int originX;
+	private int originY;
+	private int height;
+	private int width;
+	private int halfHeight;
+	private int halfWidth;
 
 
 	public int getOriginX(){return originX;}
