@@ -125,7 +125,7 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
                        TILE_SIZE, TILE_SIZE);
       
       // the nad
-      g.setColor(Color.ORANGE);
+      g.setColor(Color.ORANGE)h
       int nadRad = P2DManager.millitileToPixel(nad.getRadius());
       g.fillOval(P2DManager.millitileToPixel(nad.getOriginX()) - nadRad, 
                         P2DManager.millitileToPixel(nad.getOriginY()) - nadRad, 
