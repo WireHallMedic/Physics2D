@@ -66,20 +66,25 @@ public class Zone
    
    public GeometryBlock getBlock(int x, int y)
    {
-      if(x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+      if(isOutOfBounds(x, y))
          return oobBlock;
       return geometry[x][y];
    }
    
    public void setBlock(int x, int y, GeometryBlock block)
    {
-      if(x < 0 || y < 0 || x >= getWidth() || y >= getHeight())
+      if(isOutOfBounds(x, y))
          return;
       geometry[x][y] = block;
    }
    
    public boolean isInBounds(int x, int y)
    {
-      return !(x < 0 || y < 0 || x >= getWidth() || y >= getHeight());
+      return !isInBounds(x, y);
+   }
+   
+   public boolean isOutOfBounds(int x, int y)
+   {
+      return x < 0 || y < 0 || x >= getWidth() || y >= getHeight();
    }
 }
