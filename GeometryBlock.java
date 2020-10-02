@@ -22,7 +22,7 @@ public class GeometryBlock
 
 
 
-   public GeometryBlock(boolean p, int gi)
+   public GeometryBlock(boolean p, int pi)
    {
       passable = p;
       physicsIndex = pi;

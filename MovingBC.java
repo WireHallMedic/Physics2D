@@ -292,7 +292,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
       int frict = 0;
       for(int x = tileX1; x <= tileX2; x++)
       for(int y = tileY1; y <= tileY2; y++)
-         frict = Math.max(frict, geoMap[x][y].getFrictionIndex());
+         frict = Math.max(frict, geoMap[x][y].getPhysicsIndex());
       return P2DManager.getFriction(frict);
    }
    // returns the highest indexed speedMult of tiles occupied by the AABB
@@ -306,7 +306,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
       int smi = 0;
       for(int x = tileX1; x <= tileX2; x++)
       for(int y = tileY1; y <= tileY2; y++)
-         smi = Math.max(smi, geoMap[x][y].getSpeedMultIndex());
+         smi = Math.max(smi, geoMap[x][y].getPhysicsIndex());
       return P2DManager.getSpeedMult(smi);
    }
 }

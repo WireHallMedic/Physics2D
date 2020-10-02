@@ -77,4 +77,9 @@ public class Zone
          return;
       geometry[x][y] = block;
    }
+   
+   public boolean isInBounds(int x, int y)
+   {
+      return !(x < 0 || y < 0 || x >= getWidth() || y >= getHeight());
+   }
 }

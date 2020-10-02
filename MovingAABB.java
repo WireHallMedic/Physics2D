@@ -281,7 +281,7 @@ public class MovingAABB extends AABB implements MovingBS
          int tileX1 = (getOriginX() + sensorInset) / 1000;               // left
          int tileX2 = (getOriginX() + getWidth() - sensorInset) / 1000;       // right
          for(int x = tileX1; x <= tileX2; x++)
-            index = Math.max(index, geoMap[x][tileY].getFrictionIndex());
+            index = Math.max(index, geoMap[x][tileY].getPhysicsIndex());
          return P2DManager.getFriction(index);
       }
       return 1.0;
@@ -297,7 +297,7 @@ public class MovingAABB extends AABB implements MovingBS
       int grav = 0;
       for(int x = tileX1; x <= tileX2; x++)
       for(int y = tileY1; y <= tileY2; y++)
-         grav = Math.max(grav, geoMap[x][y].getGravityIndex());
+         grav = Math.max(grav, geoMap[x][y].getPhysicsIndex());
       return grav;
    }
    
@@ -314,7 +314,7 @@ public class MovingAABB extends AABB implements MovingBS
       int frict = 0;
       for(int x = tileX1; x <= tileX2; x++)
       for(int y = tileY1; y <= tileY2; y++)
-         frict = Math.max(frict, geoMap[x][y].getFrictionIndex());
+         frict = Math.max(frict, geoMap[x][y].getPhysicsIndex());
       return P2DManager.getFriction(frict);
    }
    // returns the highest indexed speedMult of tiles occupied by the AABB
@@ -328,7 +328,7 @@ public class MovingAABB extends AABB implements MovingBS
       int smi = 0;
       for(int x = tileX1; x <= tileX2; x++)
       for(int y = tileY1; y <= tileY2; y++)
-         smi = Math.max(smi, geoMap[x][y].getSpeedMultIndex());
+         smi = Math.max(smi, geoMap[x][y].getPhysicsIndex());
       return P2DManager.getSpeedMult(smi);
    }
 }
