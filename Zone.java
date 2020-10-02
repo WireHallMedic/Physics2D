@@ -87,4 +87,29 @@ public class Zone
    {
       return x < 0 || y < 0 || x >= getWidth() || y >= getHeight();
    }
+   
+   // get the gravity of the passed geoBlock
+   public int getGravity(int x, int y)
+   {
+      return physicsManager.getGravity(getBlock(x, y).getPhysicsIndex());
+   }
+   
+   // get the terminal velocity of the passed geoBlock
+   public int getTerminalVelocity(int x, int y)
+   {
+      return physicsManager.getTerminalVelocity(getBlock(x, y).getPhysicsIndex());
+   }
+   
+   // get the friction of the passed geoBlock
+   public double getFriction(int x, int y)
+   {
+      return physicsManager.getFriction(getBlock(x, y).getPhysicsIndex());
+   }
+   
+   // get the speed multiplier of the passed geoBlock
+   public double getSpeedMult(int x, int y)
+   {
+      return physicsManager.getSpeedMult(getBlock(x, y).getPhysicsIndex());
+   }
+   
 }
