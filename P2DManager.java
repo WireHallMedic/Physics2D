@@ -42,6 +42,11 @@ public class P2DManager
 	public  void setSpeedMult(double sm){setSpeedMult(DEFAULT_PHYSICS_INDEX, sm);}
    public  void setTileSize(int t){tileSize = t;}
    
+   public P2DManager(int g, int tv, double f, double sm)
+   {
+      setDefaultPhysicsValues(g, tv, f, sm);
+   }
+   
    public int millitileToPixel(int mtLoc)
    {
       return mtLoc * tileSize / 1000;

@@ -44,4 +44,10 @@ public class P2DTools
          return false;
       return true;
    }
+   
+   // tile size is in pixels
+   public static int millitileToPixel(int mtLoc, int tileSize)
+   {
+      return mtLoc * tileSize / 1000;
+   }
 }
