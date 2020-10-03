@@ -40,9 +40,8 @@ public class TopDownPhysicsTest extends JPanel implements KeyListener, ActionLis
       passMap = null;
       
       zone = new Zone();
-      P2DManager.setTileSize(TILE_SIZE);
       
-	   P2DManager.setSpeedMult(WATER_PHYSICS_INDEX, .5);
+	   zone.setSpeedMult(WATER_PHYSICS_INDEX, .5);
       
       // remember circles are drawn from the center
       circle = new BoundingCircle(1000,5500, 5500);
@@ -85,7 +84,7 @@ public class TopDownPhysicsTest extends JPanel implements KeyListener, ActionLis
    {
       int xSpd = player.getXSpeed();
       int ySpd = player.getYSpeed();
-      double speedMult = player.getTopDownSpeedMult(blockMap);
+      double speedMult = player.getTopDownSpeedMult(zone);
       
       // horizontal movement
       if(rightHeld)
@@ -123,7 +122,7 @@ public class TopDownPhysicsTest extends JPanel implements KeyListener, ActionLis
          
       player.setXSpeed(xSpd);
       player.setYSpeed(ySpd);
-      player.doPhysics(blockMap);
+      player.doPhysics(zone);
       this.repaint();
    }
    
@@ -138,7 +137,7 @@ public class TopDownPhysicsTest extends JPanel implements KeyListener, ActionLis
             g.setColor(Color.BLACK);
             g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
          }
-         else if(blockMap[x][y].getGravityIndex() == WATER_PHYSICS_INDEX)
+         else if(zone.getBlock(x, y).getPhysicsIndex() == WATER_PHYSICS_INDEX)
          {
             g.setColor(Color.BLUE);
             g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -149,19 +148,20 @@ public class TopDownPhysicsTest extends JPanel implements KeyListener, ActionLis
       if(player.isColliding(circle))
          g.setColor(Color.RED);
       int r = circle.getRadius();
-      g.fillOval(P2DManager.millitileToPixel(circle.getOriginX() - r), 
-                 P2DManager.millitileToPixel(circle.getOriginY() - r), 
-                 P2DManager.millitileToPixel(r + r), 
-                 P2DManager.millitileToPixel(r + r));
+      g.fillOval(P2DTools.millitileToPixel(circle.getOriginX() - r, TILE_SIZE), 
+                 P2DTools.millitileToPixel(circle.getOriginY() - r, TILE_SIZE), 
+                 P2DTools.millitileToPixel(r + r, TILE_SIZE), 
+                 P2DTools.millitileToPixel(r + r, TILE_SIZE));
       
       g.setColor(Color.YELLOW);
-      g.fillRect(P2DManager.millitileToPixel(player.getOriginX()), P2DManager.millitileToPixel(player.getOriginY()), 
+      g.fillRect(P2DTools.millitileToPixel(player.getOriginX(), TILE_SIZE), 
+                 P2DTools.millitileToPixel(player.getOriginY(), TILE_SIZE), 
                        TILE_SIZE, TILE_SIZE);
       
-      int sensorInset = P2DManager.millitileToPixel(player.impactSensorOffset);
+      int sensorInset = P2DTools.millitileToPixel(player.sensorInset, TILE_SIZE);
       int sensorLength = TILE_SIZE - sensorInset - sensorInset;
-      int playerXLoc = P2DManager.millitileToPixel(player.getOriginX());
-      int playerYLoc = P2DManager.millitileToPixel(player.getOriginY());
+      int playerXLoc = P2DTools.millitileToPixel(player.getOriginX(), TILE_SIZE);
+      int playerYLoc = P2DTools.millitileToPixel(player.getOriginY(), TILE_SIZE);
       g.setColor(Color.RED);
       
       if(player.topSensor())

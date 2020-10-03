@@ -33,6 +33,11 @@ public class Zone
    public void setOOBBlock(GeometryBlock b){oobBlock = b;}
 
 
+   public Zone()
+   {
+      this(DEFAULT_ZONE_WIDTH, DEFAULT_ZONE_HEIGHT, 0, 0, 1.0, 1.0);
+   }
+
    public Zone(int grav, int termVel, double frict, double speedM)
    {
       this(DEFAULT_ZONE_WIDTH, DEFAULT_ZONE_HEIGHT, grav, termVel, frict, speedM);
