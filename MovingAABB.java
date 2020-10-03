@@ -124,8 +124,7 @@ public class MovingAABB extends AABB implements MovingBS
       int localGravity = getGravity(zone);
       // set prospective position
       if(affectedByGravity)
-         ySpeed = Math.min(ySpeed + zone.getGravity(localGravity), 
-                           zone.getTerminalVelocity(localGravity));
+         ySpeed = Math.min(ySpeed + localGravity, localGravity);
       stepOriginX = getOriginX() + xSpeed;
       stepOriginY = getOriginY() + ySpeed;
       

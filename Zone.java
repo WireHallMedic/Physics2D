@@ -88,6 +88,16 @@ public class Zone
       return x < 0 || y < 0 || x >= getWidth() || y >= getHeight();
    }
    
+   // physics manager stuff
+   public void setGravity(int i, int g){physicsManager.setGravity(i, g);}
+	public void setGravity(int g){physicsManager.setGravity(g);}
+	public void setTerminalVelocity(int i, int t){physicsManager.setTerminalVelocity(i, t);}
+	public void setTerminalVelocity(int t){physicsManager.setTerminalVelocity(t);}
+	public void setFriction(int i, double f){physicsManager.setFriction(i, f);}
+	public void setFriction(double f){physicsManager.setFriction(f);}
+	public void setSpeedMult(int i, double sm){physicsManager.setSpeedMult(i, sm);}
+	public void setSpeedMult(double sm){physicsManager.setSpeedMult(sm);}
+   
    // get the gravity of the passed geoBlock
    public int getGravity(int x, int y)
    {

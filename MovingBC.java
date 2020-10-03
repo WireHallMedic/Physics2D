@@ -99,12 +99,19 @@ public class MovingBC extends BoundingCircle implements MovingBS
    public Vector<Coord> getOccupiedTiles()
    {
       Vector<Coord> tileList = new Vector<Coord>();
+      int tileX1 = (originX - radius) / 1000;
+      int tileY1 = (originY - radius) / 1000;
+      int tileX2 = (originX + radius - 1) / 1000;
+      int tileY2 = (originY + radius - 1) / 1000;
       
+      for(int x = tileX1; x <= tileX2; x++)
+      for(int y = tileY1; y <= tileY2; y++)
+         tileList.add(new Coord(x, y));
       return tileList;
    }
    
    // move x, resolve x collisions, move y, resolve y collisions
-   public void doPhysics(GeometryBlock[][] geoMap)
+   public void doPhysics(Zone zone)
    {
       stepOriginX = originX + xSpeed;
       stepOriginY = originY + ySpeed;
@@ -117,7 +124,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
          boolean yBump = false;
          boolean xBump = false;
          // check and resolve horizontal movement
-         int snapLocX = getHorizSnapLoc(stepOriginX, originY, geoMap);
+         int snapLocX = getHorizSnapLoc(stepOriginX, originY, zone.getGeometry());
          if(snapLocX != -1)
          {
             stepOriginX = snapLocX;
@@ -125,7 +132,7 @@ public class MovingBC extends BoundingCircle implements MovingBS
          }
 
          // check and resolve vertical movement
-         int snapLocY = getVertSnapLoc(stepOriginX, stepOriginY, geoMap);
+         int snapLocY = getVertSnapLoc(stepOriginX, stepOriginY, zone.getGeometry());
          if(snapLocY != -1)
          {
             stepOriginY = snapLocY;
@@ -293,30 +300,23 @@ public class MovingBC extends BoundingCircle implements MovingBS
    ///////////////////////////////////////////////////////////////////////////////////////
    
    // returns the highest indexed friction of tiles occupied by the AABB
-   public double getTopDownFriction(GeometryBlock[][] geoMap)
+   public double getTopDownFriction(Zone zone)
    {
-      int tileX1 = (originX - radius) / 1000;
-      int tileY1 = (originY - radius) / 1000;
-      int tileX2 = (originX + radius - 1) / 1000;
-      int tileY2 = (originY + radius - 1) / 1000;
+      GeometryBlock[][] geoMap = zone.getGeometry();
+      Vector<Coord> tileList = getOccupiedTiles();
       int frict = 0;
-      for(int x = tileX1; x <= tileX2; x++)
-      for(int y = tileY1; y <= tileY2; y++)
-         frict = Math.max(frict, geoMap[x][y].getPhysicsIndex());
-      return P2DManager.getFriction(frict);
+      for(Coord c : tileList)
+         frict = Math.max(frict, geoMap[c.x][c.y].getPhysicsIndex());
+      return zone.getFriction(frict);
    }
    // returns the highest indexed speedMult of tiles occupied by the AABB
-   public double getTopDownSpeedMult(GeometryBlock[][] geoMap)
+   public double getTopDownSpeedMult(Zone zone)
    {
-      int tileX1 = (originX - radius) / 1000;
-      int tileY1 = (originY - radius) / 1000;
-      int tileX2 = (originX + radius - 1) / 1000;
-      int tileY2 = (originY + radius - 1) / 1000;
-      
+      GeometryBlock[][] geoMap = zone.getGeometry();
+      Vector<Coord> tileList = getOccupiedTiles();
       int smi = 0;
-      for(int x = tileX1; x <= tileX2; x++)
-      for(int y = tileY1; y <= tileY2; y++)
-         smi = Math.max(smi, geoMap[x][y].getPhysicsIndex());
-      return P2DManager.getSpeedMult(smi);
+      for(Coord c : tileList)
+         smi = Math.max(smi, geoMap[c.x][c.y].getPhysicsIndex());
+      return zone.getSpeedMult(smi);
    }
 }

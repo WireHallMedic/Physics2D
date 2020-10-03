@@ -16,12 +16,12 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
    public static final int WATER_GRAVITY = 15;
    public static final int WATER_PHYSICS_INDEX = P2DManager.DEFAULT_PHYSICS_INDEX + 1;
    public static final int ICE_PHYSICS_INDEX = WATER_PHYSICS_INDEX + 1;
-   public static GeometryBlock[][] blockMap;
    private boolean leftHeld = false;
    private boolean rightHeld = false;
    
    private MovingAABB player;
    private MovingBC nad;
+   private Zone zone;
    
    public PhysicsTest()
    {
@@ -36,16 +36,11 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
       nad = new MovingBC(500, 0, -1000);
       nad.setLeader(player);
       
-      blockMap = genBlockMap();
-      
-      P2DManager.initializeValues(NORMAL_GRAVITY, NORMAL_TERMINAL_VELOCITY, 1.0, 1.0);
-      
-      P2DManager.setGravity(WATER_PHYSICS_INDEX, WATER_GRAVITY);
-      P2DManager.setTerminalVelocity(WATER_PHYSICS_INDEX, NORMAL_TERMINAL_VELOCITY / 4);
-      
-      P2DManager.setFriction(ICE_PHYSICS_INDEX, 0.25);
-      
-      P2DManager.setTileSize(TILE_SIZE);
+      zone = new Zone(NORMAL_GRAVITY, NORMAL_TERMINAL_VELOCITY, 1.0, 1.0);
+      zone.setGeometry(genBlockMap());
+      zone.setGravity(WATER_PHYSICS_INDEX, WATER_GRAVITY);
+      zone.setTerminalVelocity(WATER_PHYSICS_INDEX, NORMAL_TERMINAL_VELOCITY / 4);
+      zone.setFriction(ICE_PHYSICS_INDEX, 0.25);
       
       javax.swing.Timer timer = new javax.swing.Timer(1000/30, null);
       timer.addActionListener(this);
@@ -76,7 +71,7 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
    public void actionPerformed(ActionEvent ae)
    {
       int xSpd = player.getXSpeed();
-      double friction = player.getSideOnFriction(blockMap);
+      double friction = player.getSideOnFriction(zone);
       double accelMult = (.5 + friction) / 2.0;
       // horizontal movement
       
@@ -97,7 +92,7 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
          xSpd = -MAX_SPEED;
          
       player.setXSpeed(xSpd);
-      player.doPhysics(blockMap);
+      player.doPhysics(zone);
       this.repaint();
    }
    
@@ -109,33 +104,34 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
       for(int x = 0; x < MAP_SIZE; x++)
       for(int y = 0; y < MAP_SIZE; y++)
       {
-         if(!blockMap[x][y].isPassable())
+         if(!(zone.getBlock(x, y).isPassable()))
          {
             g.setColor(Color.BLACK);
             g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
          }
-         else if(blockMap[x][y].getGravityIndex() == WATER_PHYSICS_INDEX)
+         else if(zone.getBlock(x, y).getPhysicsIndex() == WATER_PHYSICS_INDEX)
          {
             g.setColor(Color.BLUE);
             g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
          }
       }
       g.setColor(Color.YELLOW);
-      g.fillRect(P2DManager.millitileToPixel(player.getOriginX()), P2DManager.millitileToPixel(player.getOriginY()), 
-                       TILE_SIZE, TILE_SIZE);
+      g.fillRect(P2DTools.millitileToPixel(player.getOriginX(), TILE_SIZE), 
+                 P2DTools.millitileToPixel(player.getOriginY(), TILE_SIZE), 
+                 TILE_SIZE, TILE_SIZE);
       
       // the nad
-      g.setColor(Color.ORANGE)h
-      int nadRad = P2DManager.millitileToPixel(nad.getRadius());
-      g.fillOval(P2DManager.millitileToPixel(nad.getOriginX()) - nadRad, 
-                        P2DManager.millitileToPixel(nad.getOriginY()) - nadRad, 
+      g.setColor(Color.ORANGE);
+      int nadRad = P2DTools.millitileToPixel(nad.getRadius(), TILE_SIZE);
+      g.fillOval(P2DTools.millitileToPixel(nad.getOriginX(), TILE_SIZE) - nadRad, 
+                 P2DTools.millitileToPixel(nad.getOriginY(), TILE_SIZE) - nadRad, 
                         nadRad * 2, nadRad * 2);
                        
       // player sensors
-      int sensorInset = P2DManager.millitileToPixel(player.sensorInset);
+      int sensorInset = P2DTools.millitileToPixel(player.sensorInset, TILE_SIZE);
       int sensorLength = TILE_SIZE - sensorInset - sensorInset;
-      int playerXLoc = P2DManager.millitileToPixel(player.getOriginX());
-      int playerYLoc = P2DManager.millitileToPixel(player.getOriginY());
+      int playerXLoc = P2DTools.millitileToPixel(player.getOriginX(), TILE_SIZE);
+      int playerYLoc = P2DTools.millitileToPixel(player.getOriginY(), TILE_SIZE);
       g.setColor(Color.RED);
       
       if(player.topSensor())
@@ -213,12 +209,12 @@ public class PhysicsTest extends JPanel implements KeyListener, ActionListener
             bMap[x][y] = GeometryBlock.getSolidBlock();
       }
       
-      bMap[MAP_SIZE / 2][MAP_SIZE - 4].setAllPhysicsIndices(ICE_PHYSICS_INDEX);
-      bMap[(MAP_SIZE / 2) + 1][MAP_SIZE - 4].setAllPhysicsIndices(ICE_PHYSICS_INDEX);
-      bMap[2][4].setAllPhysicsIndices(ICE_PHYSICS_INDEX);
+      bMap[MAP_SIZE / 2][MAP_SIZE - 4].setPhysicsIndex(ICE_PHYSICS_INDEX);
+      bMap[(MAP_SIZE / 2) + 1][MAP_SIZE - 4].setPhysicsIndex(ICE_PHYSICS_INDEX);
+      bMap[2][4].setPhysicsIndex(ICE_PHYSICS_INDEX);
       
       for(int y = 1; y < MAP_SIZE - 1; y++)
-         bMap[MAP_SIZE - 2][y].setAllPhysicsIndices(WATER_PHYSICS_INDEX);
+         bMap[MAP_SIZE - 2][y].setPhysicsIndex(WATER_PHYSICS_INDEX);
       
       return bMap;
    }
