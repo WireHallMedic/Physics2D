@@ -23,6 +23,7 @@ public class TopDownPhysicsTest2 extends JPanel implements KeyListener, ActionLi
    private BoundingCircle circle;
    
    private MovingBC player;
+   private Zone zone;
    
    public TopDownPhysicsTest2()
    {
@@ -38,9 +39,10 @@ public class TopDownPhysicsTest2 extends JPanel implements KeyListener, ActionLi
       blockMap = genBlockMap();
       passMap = null;
       
-      P2DManager.setTileSize(TILE_SIZE);
+      zone = new Zone();
+      zone.setGeometry(blockMap);
       
-	   P2DManager.setSpeedMult(WATER_PHYSICS_INDEX, .5);
+	   zone.setSpeedMult(WATER_PHYSICS_INDEX, .5);
       
       // remember circles are drawn from the center
       circle = new BoundingCircle(1000,5500, 5500);
@@ -83,7 +85,7 @@ public class TopDownPhysicsTest2 extends JPanel implements KeyListener, ActionLi
    {
       int xSpd = player.getXSpeed();
       int ySpd = player.getYSpeed();
-      double speedMult = player.getTopDownSpeedMult(blockMap);
+      double speedMult = player.getTopDownSpeedMult(zone);
       
       // horizontal movement
       if(rightHeld)
@@ -121,7 +123,7 @@ public class TopDownPhysicsTest2 extends JPanel implements KeyListener, ActionLi
          
       player.setXSpeed(xSpd);
       player.setYSpeed(ySpd);
-      player.doPhysics(blockMap);
+      player.doPhysics(zone);
       this.repaint();
    }
    
@@ -136,7 +138,7 @@ public class TopDownPhysicsTest2 extends JPanel implements KeyListener, ActionLi
             g.setColor(Color.BLACK);
             g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
          }
-         else if(blockMap[x][y].getGravityIndex() == WATER_PHYSICS_INDEX)
+         else if(zone.getBlock(x, y).getPhysicsIndex() == WATER_PHYSICS_INDEX)
          {
             g.setColor(Color.BLUE);
             g.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -147,13 +149,14 @@ public class TopDownPhysicsTest2 extends JPanel implements KeyListener, ActionLi
       if(player.isColliding(circle))
          g.setColor(Color.RED);
       int r = circle.getRadius();
-      g.fillOval(P2DManager.millitileToPixel(circle.getOriginX() - r), 
-                 P2DManager.millitileToPixel(circle.getOriginY() - r), 
-                 P2DManager.millitileToPixel(r + r), 
-                 P2DManager.millitileToPixel(r + r));
+      g.fillOval(P2DTools.millitileToPixel(circle.getOriginX() - r, TILE_SIZE), 
+                 P2DTools.millitileToPixel(circle.getOriginY() - r, TILE_SIZE), 
+                 P2DTools.millitileToPixel(r + r, TILE_SIZE), 
+                 P2DTools.millitileToPixel(r + r, TILE_SIZE));
       
       g.setColor(Color.CYAN);
-      g.fillOval(P2DManager.millitileToPixel(player.getOriginX() - 500), P2DManager.millitileToPixel(player.getOriginY() - 500), 
+      g.fillOval(P2DTools.millitileToPixel(player.getOriginX() - 500, TILE_SIZE), 
+                 P2DTools.millitileToPixel(player.getOriginY() - 500, TILE_SIZE), 
                        TILE_SIZE, TILE_SIZE);
    }
    
@@ -201,7 +204,7 @@ public class TopDownPhysicsTest2 extends JPanel implements KeyListener, ActionLi
       }
       for(int y = 1; y < MAP_SIZE - 1; y++)
       {
-         bMap[MAP_SIZE - 2][y].setAllPhysicsIndices(WATER_PHYSICS_INDEX);
+         bMap[MAP_SIZE - 2][y].setPhysicsIndex(WATER_PHYSICS_INDEX);
       }
       return bMap;
    }

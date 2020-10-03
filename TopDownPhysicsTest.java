@@ -40,6 +40,7 @@ public class TopDownPhysicsTest extends JPanel implements KeyListener, ActionLis
       passMap = null;
       
       zone = new Zone();
+      zone.setGeometry(blockMap);
       
 	   zone.setSpeedMult(WATER_PHYSICS_INDEX, .5);
       
