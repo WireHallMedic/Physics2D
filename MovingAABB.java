@@ -124,7 +124,7 @@ public class MovingAABB extends AABB implements MovingBS
       int localGravity = getGravity(zone);
       // set prospective position
       if(affectedByGravity)
-         ySpeed = Math.min(ySpeed + localGravity, localGravity);
+         ySpeed = Math.min(ySpeed + localGravity, getTerminalVelocity(zone));
       stepOriginX = getOriginX() + xSpeed;
       stepOriginY = getOriginY() + ySpeed;
       
@@ -313,6 +313,17 @@ public class MovingAABB extends AABB implements MovingBS
       for(Coord c : tileList)
          grav = Math.max(grav, geoMap[c.x][c.y].getPhysicsIndex());
       return zone.getGravity(grav);
+   }
+   
+   // returns the highest-indexed terminal velocity used by one of the blocks which contains part of this AABB
+   public int getTerminalVelocity(Zone zone)
+   {
+      GeometryBlock[][] geoMap = zone.getGeometry();
+      Vector<Coord> tileList = getOccupiedTiles();
+      int grav = 0;
+      for(Coord c : tileList)
+         grav = Math.max(grav, geoMap[c.x][c.y].getPhysicsIndex());
+      return zone.getTerminalVelocity(grav);
    }
    
    // top-down methods

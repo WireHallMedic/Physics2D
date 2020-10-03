@@ -41,7 +41,7 @@ public class P2DManager
    
    public P2DManager(int g, int tv, double f, double sm)
    {
-      setDefaultPhysicsValues(g, tv, f, sm);
+      initializeValues(g, tv, f, sm);
    }
    
    public void setArraySizes(int s)

@@ -23,6 +23,7 @@ public class TopDownPhysicsTest extends JPanel implements KeyListener, ActionLis
    private BoundingCircle circle;
    
    private MovingAABB player;
+   private Zone zone;
    
    public TopDownPhysicsTest()
    {
@@ -38,6 +39,7 @@ public class TopDownPhysicsTest extends JPanel implements KeyListener, ActionLis
       blockMap = genBlockMap();
       passMap = null;
       
+      zone = new Zone();
       P2DManager.setTileSize(TILE_SIZE);
       
 	   P2DManager.setSpeedMult(WATER_PHYSICS_INDEX, .5);
@@ -233,7 +235,7 @@ public class TopDownPhysicsTest extends JPanel implements KeyListener, ActionLis
       }
       for(int y = 1; y < MAP_SIZE - 1; y++)
       {
-         bMap[MAP_SIZE - 2][y].setAllPhysicsIndices(WATER_PHYSICS_INDEX);
+         bMap[MAP_SIZE - 2][y].setPhysicsIndex(WATER_PHYSICS_INDEX);
       }
       return bMap;
    }
