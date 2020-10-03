@@ -18,7 +18,6 @@ public class P2DManager
 	private  int[] terminalVelocity = new int[11];
 	private  double[] friction = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 	private  double[] speedMult = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
-   private  int tileSize = 1;
 
 
 	public  int getGravity(int g){return gravity[g];}
@@ -29,7 +28,6 @@ public class P2DManager
 	public  double getFriction(){return getFriction(DEFAULT_PHYSICS_INDEX);}
 	public  double getSpeedMult(int sm){return speedMult[sm];}
 	public  double getSpeedMult(){return getSpeedMult(DEFAULT_PHYSICS_INDEX);}
-   public  int getTileSize(){return tileSize;}
 
 
 	public  void setGravity(int i, int g){gravity[i] = g;}
@@ -40,16 +38,10 @@ public class P2DManager
 	public  void setFriction(double f){setFriction(DEFAULT_PHYSICS_INDEX, f);}
 	public  void setSpeedMult(int i, double sm){speedMult[i] = sm;}
 	public  void setSpeedMult(double sm){setSpeedMult(DEFAULT_PHYSICS_INDEX, sm);}
-   public  void setTileSize(int t){tileSize = t;}
    
    public P2DManager(int g, int tv, double f, double sm)
    {
       setDefaultPhysicsValues(g, tv, f, sm);
-   }
-   
-   public int millitileToPixel(int mtLoc)
-   {
-      return mtLoc * tileSize / 1000;
    }
    
    public void setArraySizes(int s)

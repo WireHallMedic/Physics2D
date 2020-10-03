@@ -7,6 +7,9 @@
 
 package Physics2D;
 
+import java.util.*;
+import WidlerSuite.*;
+
 public class MovingAABB extends AABB implements MovingBS
 {
 	private int xSpeed;
@@ -101,14 +104,28 @@ public class MovingAABB extends AABB implements MovingBS
       ySpeed += y;
    }
    
-   // move x, resolve x collisions, move y, resolve y collisions
-   public void doPhysics(GeometryBlock[][] geoMap)
+   public Vector<Coord> getOccupiedTiles()
    {
-      int localGravity = getGravity(geoMap);
+      Vector<Coord> tileList = new Vector<Coord>();
+      int tileX1 = getOriginX() / 1000;
+      int tileY1 = getOriginY() / 1000;
+      int tileX2 = (getOriginX() + getWidth() - 1) / 1000;
+      int tileY2 = (getOriginY() + getHeight() - 1) / 1000;
+      
+      for(int x = tileX1; x <= tileX2; x++)
+      for(int y = tileY1; y <= tileY2; y++)
+         tileList.add(new Coord(x, y));
+      return tileList;
+   }
+   
+   // move x, resolve x collisions, move y, resolve y collisions
+   public void doPhysics(Zone zone)
+   {
+      int localGravity = getGravity(zone);
       // set prospective position
       if(affectedByGravity)
-         ySpeed = Math.min(ySpeed + P2DManager.getGravity(localGravity), 
-                           P2DManager.getTerminalVelocity(localGravity));
+         ySpeed = Math.min(ySpeed + zone.getGravity(localGravity), 
+                           zone.getTerminalVelocity(localGravity));
       stepOriginX = getOriginX() + xSpeed;
       stepOriginY = getOriginY() + ySpeed;
       
@@ -121,21 +138,21 @@ public class MovingAABB extends AABB implements MovingBS
       if(corporeal)
       {
          // check and resolve horizontal movement
-         int snapLocX = getHorizSnapLoc(stepOriginX, getOriginY(), geoMap);
+         int snapLocX = getHorizSnapLoc(stepOriginX, getOriginY(), zone.getGeometry());
          if(snapLocX != -1)
          {
             stepOriginX = snapLocX;
          }
 
          // check and resolve vertical movement
-         int snapLocY = getVertSnapLoc(stepOriginX, stepOriginY, geoMap);
+         int snapLocY = getVertSnapLoc(stepOriginX, stepOriginY, zone.getGeometry());
          if(snapLocY != -1)
          {
             stepOriginY = snapLocY;
          }
          
          // check if you're bumping into any walls
-         updateSensors(stepOriginX, stepOriginY, geoMap);
+         updateSensors(stepOriginX, stepOriginY, zone.getGeometry());
          
          // stop movement if bumping into wall on that vector
          if(xSpeed > 0 && rightSensor)
@@ -272,8 +289,9 @@ public class MovingAABB extends AABB implements MovingBS
    
    // if the actor is standing on a block, returns the highest indexed friction, else
    // returns 1.0
-   public double getSideOnFriction(GeometryBlock[][] geoMap)
+   public double getSideOnFriction(Zone zone)
    {
+      GeometryBlock[][] geoMap = zone.getGeometry();
       if(bottomSensor)
       {
          int index = -1;
@@ -282,53 +300,44 @@ public class MovingAABB extends AABB implements MovingBS
          int tileX2 = (getOriginX() + getWidth() - sensorInset) / 1000;       // right
          for(int x = tileX1; x <= tileX2; x++)
             index = Math.max(index, geoMap[x][tileY].getPhysicsIndex());
-         return P2DManager.getFriction(index);
+         return zone.getFriction(index);
       }
       return 1.0;
    }
    
    // returns the highest-indexed gravity used by one of the blocks which contains part of this AABB
-   public int getGravity(GeometryBlock[][] geoMap)
+   public int getGravity(Zone zone)
    {
-      int tileX1 = getOriginX() / 1000;
-      int tileY1 = getOriginY() / 1000;
-      int tileX2 = (getOriginX() + getWidth() - 1) / 1000;
-      int tileY2 = (getOriginY() + getHeight() - 1) / 1000;
+      GeometryBlock[][] geoMap = zone.getGeometry();
+      Vector<Coord> tileList = getOccupiedTiles();
       int grav = 0;
-      for(int x = tileX1; x <= tileX2; x++)
-      for(int y = tileY1; y <= tileY2; y++)
-         grav = Math.max(grav, geoMap[x][y].getPhysicsIndex());
-      return grav;
+      for(Coord c : tileList)
+         grav = Math.max(grav, geoMap[c.x][c.y].getPhysicsIndex());
+      return zone.getGravity(grav);
    }
    
    // top-down methods
    ///////////////////////////////////////////////////////////////////////////////////////
    
    // returns the highest indexed friction of tiles occupied by the AABB
-   public double getTopDownFriction(GeometryBlock[][] geoMap)
+   public double getTopDownFriction(Zone zone)
    {
-      int tileX1 = getOriginX() / 1000;
-      int tileY1 = getOriginY() / 1000;
-      int tileX2 = (getOriginX() + getWidth() - 1) / 1000;
-      int tileY2 = (getOriginY() + getHeight() - 1) / 1000;
+      GeometryBlock[][] geoMap = zone.getGeometry();
+         Vector<Coord> tileList = getOccupiedTiles();
       int frict = 0;
-      for(int x = tileX1; x <= tileX2; x++)
-      for(int y = tileY1; y <= tileY2; y++)
-         frict = Math.max(frict, geoMap[x][y].getPhysicsIndex());
-      return P2DManager.getFriction(frict);
+      for(Coord c : tileList)
+         frict = Math.max(frict, geoMap[c.x][c.y].getPhysicsIndex());
+      return zone.getFriction(frict);
    }
+   
    // returns the highest indexed speedMult of tiles occupied by the AABB
-   public double getTopDownSpeedMult(GeometryBlock[][] geoMap)
+   public double getTopDownSpeedMult(Zone zone)
    {
-      int tileX1 = getOriginX() / 1000;
-      int tileY1 = getOriginY() / 1000;
-      int tileX2 = (getOriginX() + getWidth() - 1) / 1000;
-      int tileY2 = (getOriginY() + getHeight() - 1) / 1000;
-      
+      GeometryBlock[][] geoMap = zone.getGeometry();
+      Vector<Coord> tileList = getOccupiedTiles();
       int smi = 0;
-      for(int x = tileX1; x <= tileX2; x++)
-      for(int y = tileY1; y <= tileY2; y++)
-         smi = Math.max(smi, geoMap[x][y].getPhysicsIndex());
-      return P2DManager.getSpeedMult(smi);
+      for(Coord c : tileList)
+         smi = Math.max(smi, geoMap[c.x][c.y].getPhysicsIndex());
+      return zone.getSpeedMult(smi);
    }
 }

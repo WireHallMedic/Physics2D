@@ -33,14 +33,14 @@ public class Zone
    public void setOOBBlock(GeometryBlock b){oobBlock = b;}
 
 
-   public Zone()
+   public Zone(int grav, int termVel, double frict, double speedM)
    {
-      this(DEFAULT_ZONE_WIDTH, DEFAULT_ZONE_HEIGHT);
+      this(DEFAULT_ZONE_WIDTH, DEFAULT_ZONE_HEIGHT, grav, termVel, frict, speedM);
    }
    
-   public Zone(int w, int h)
+   public Zone(int w, int h, int grav, int termVel, double frict, double speedM)
    {
-      physicsManager = new P2DManager();
+      physicsManager = new P2DManager(grav, termVel, frict, speedM);
       geometry = new GeometryBlock[w][h];
       oobBlock = GeometryBlock.getSolidBlock();
       fillWithOpenBlocks();
@@ -94,10 +94,22 @@ public class Zone
       return physicsManager.getGravity(getBlock(x, y).getPhysicsIndex());
    }
    
+   // get the gravity from index
+   public int getGravity(int i)
+   {
+      return physicsManager.getGravity(i);
+   }
+   
    // get the terminal velocity of the passed geoBlock
    public int getTerminalVelocity(int x, int y)
    {
       return physicsManager.getTerminalVelocity(getBlock(x, y).getPhysicsIndex());
+   }
+   
+   // get the terminal velocity from index
+   public int getTerminalVelocity(int i)
+   {
+      return physicsManager.getTerminalVelocity(i);
    }
    
    // get the friction of the passed geoBlock
@@ -106,10 +118,22 @@ public class Zone
       return physicsManager.getFriction(getBlock(x, y).getPhysicsIndex());
    }
    
+   // get the friction from index
+   public double getFriction(int i)
+   {
+      return physicsManager.getFriction(i);
+   }
+   
    // get the speed multiplier of the passed geoBlock
    public double getSpeedMult(int x, int y)
    {
       return physicsManager.getSpeedMult(getBlock(x, y).getPhysicsIndex());
+   }
+   
+   // get the speed multiplier from index
+   public double getSpeedMult(int i)
+   {
+      return physicsManager.getSpeedMult(i);
    }
    
 }

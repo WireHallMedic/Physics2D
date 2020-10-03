@@ -8,6 +8,9 @@
 
 package Physics2D;
 
+import java.util.*;
+import WidlerSuite.*;
+
 public class MovingBC extends BoundingCircle implements MovingBS
 {
 	private int xSpeed;
@@ -91,6 +94,13 @@ public class MovingBC extends BoundingCircle implements MovingBS
    {
       xSpeed += x;
       ySpeed += y;
+   }
+   
+   public Vector<Coord> getOccupiedTiles()
+   {
+      Vector<Coord> tileList = new Vector<Coord>();
+      
+      return tileList;
    }
    
    // move x, resolve x collisions, move y, resolve y collisions

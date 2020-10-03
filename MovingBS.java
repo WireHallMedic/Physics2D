@@ -6,6 +6,9 @@
 
 package Physics2D;
 
+import java.util.*;
+import WidlerSuite.*;
+
 public interface MovingBS
 {
    public int getXSpeed();
@@ -25,6 +28,7 @@ public interface MovingBS
    public void setLeader(MovingBS l);
    
    public void applyImpulse(int x, int y);
-   public void doPhysics(GeometryBlock[][] geoMap);
+   public void doPhysics(Zone zone);
+   public Vector<Coord> getOccupiedTiles();
 
 }
